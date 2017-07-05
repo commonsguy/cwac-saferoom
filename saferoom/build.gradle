@@ -1,0 +1,77 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 26
+        testApplicationId "com.commonsware.cwac.saferoom.test"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled = true
+        }
+    }
+}
+
+dependencies {
+    compile 'net.zetetic:android-database-sqlcipher:3.5.6@aar'
+    compile "android.arch.persistence.room:runtime:1.0.0-alpha3"
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile "android.arch.persistence.room:runtime:1.0.0-alpha3"
+    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha3"
+}
+
+if (project.hasProperty('PUBLISH_GROUP_ID')) {
+    // from http://stackoverflow.com/a/19484146/115145
+
+    android.libraryVariants.all { variant ->
+        def name = variant.buildType.name
+        if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
+            return; // Skip debug builds.
+        }
+        def task = project.tasks.create "jar${name.capitalize()}", Jar
+        task.dependsOn variant.javaCompile
+        task.from variant.javaCompile.destinationDir
+        task.baseName = "cwac-${PUBLISH_ARTIFACT_ID}"
+        task.version = PUBLISH_VERSION
+        task.exclude('com/commonsware/cwac/**/BuildConfig.**')
+    }
+
+    task sourcesJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    task javadoc(type: Javadoc) {
+        failOnError  false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    apply plugin: 'maven'
+
+    uploadArchives {
+        repositories.mavenDeployer {
+            pom.groupId = PUBLISH_GROUP_ID
+            pom.artifactId = PUBLISH_ARTIFACT_ID
+            pom.version = PUBLISH_VERSION
+
+            repository(url: LOCAL_REPO)
+        }
+    }
+}
