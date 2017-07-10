@@ -53,7 +53,7 @@ passing in the passphrase to use
 SafeHelperFactory factory=SafeHelperFactory.fromUser(passphraseField.getText());
 
 StuffDatabase db=Room.databaseBuilder(ctxt, StuffDatabase.class, DB_NAME)
-  .openHelperFactory(f)
+  .openHelperFactory(factory)
   .build();
 ```
 
