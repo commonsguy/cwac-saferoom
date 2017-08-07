@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:saferoom:0.0.2'
+    compile 'com.commonsware.cwac:saferoom:0.0.3'
 }
 ```
 
@@ -82,7 +82,7 @@ we no longer need to use reflection with `RoomSQLiteQuery`
 
 Version
 -------
-This is version v0.0.2 of this module, meaning it still has that new-code smell.
+This is version v0.0.3 of this module, meaning it still has that new-code smell.
 
 Demo
 ----
@@ -135,6 +135,7 @@ of guidance here.
 
 Release Notes
 -------------
+- v0.0.3: raised Room depedencies to `1.0.0-alpha8`
 - v0.0.2: raised Room depedencies to `1.0.0-alpha5`
 - v0.0.1: initial release
 
