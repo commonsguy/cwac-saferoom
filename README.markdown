@@ -135,8 +135,8 @@ of guidance here.
 
 Release Notes
 -------------
-- v0.0.3: raised Room depedencies to `1.0.0-alpha8`
-- v0.0.2: raised Room depedencies to `1.0.0-alpha5`
+- v0.0.3: raised Room dependencies to `1.0.0-alpha8`
+- v0.0.2: raised Room dependencies to `1.0.0-alpha5`
 - v0.0.1: initial release
 
 Who Made This?
