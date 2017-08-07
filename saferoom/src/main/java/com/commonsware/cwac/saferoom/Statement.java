@@ -28,61 +28,121 @@ class Statement implements SupportSQLiteStatement {
     this.safeStatement=safeStatement;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void bindNull(int index) {
     safeStatement.bindNull(index);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void bindLong(int index, long value) {
     safeStatement.bindLong(index, value);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void bindDouble(int index, double value) {
     safeStatement.bindDouble(index, value);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void bindString(int index, String value) {
     safeStatement.bindString(index, value);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void bindBlob(int index, byte[] value) {
     safeStatement.bindBlob(index, value);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void clearBindings() {
     safeStatement.clearBindings();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void execute() {
     safeStatement.execute();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public int executeUpdateDelete() {
     return safeStatement.executeUpdateDelete();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public long executeInsert() {
     return safeStatement.executeInsert();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public long simpleQueryForLong() {
     return safeStatement.simpleQueryForLong();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public String simpleQueryForString() {
     return safeStatement.simpleQueryForString();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * NOTE: Not presently supported, will throw an UnsupportedOperationException
+   */
   @Override
   public void close() throws Exception {
     safeStatement.close();
