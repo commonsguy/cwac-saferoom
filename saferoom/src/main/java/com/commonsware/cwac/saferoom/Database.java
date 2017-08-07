@@ -28,7 +28,6 @@ import android.util.Pair;
 import net.sqlcipher.database.SQLiteCursor;
 import net.sqlcipher.database.SQLiteCursorDriver;
 import net.sqlcipher.database.SQLiteQuery;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +37,9 @@ import java.util.Locale;
  * for Android implementation of SQLiteDatabase
  */
 class Database implements SupportSQLiteDatabase {
+  private static final String[] CONFLICT_VALUES = new String[]
+    {"", " OR ROLLBACK ", " OR ABORT ", " OR FAIL ", " OR IGNORE ", " OR REPLACE "};
+
   private final net.sqlcipher.database.SQLiteDatabase safeDb;
 
   Database(net.sqlcipher.database.SQLiteDatabase safeDb) {
@@ -273,7 +275,13 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public int delete(String table, String whereClause, Object[] whereArgs) {
-    return(safeDb.delete(table, whereClause, stringify(whereArgs)));
+    String query = "DELETE FROM " + table
+      + (isEmpty(whereClause) ? "" : " WHERE " + whereClause);
+    SupportSQLiteStatement statement = compileStatement(query);
+    SimpleSQLiteQuery.bind(statement, whereArgs);
+    return statement.executeUpdateDelete();
+
+//    return(safeDb.delete(table, whereClause, stringify(whereArgs)));
   }
 
   /**
@@ -282,8 +290,44 @@ class Database implements SupportSQLiteDatabase {
   @Override
   public int update(String table, int conflictAlgorithm, ContentValues values,
                     String whereClause, Object[] whereArgs) {
+    // taken from SQLiteDatabase class.
+    if (values == null || values.size() == 0) {
+      throw new IllegalArgumentException("Empty values");
+    }
+    StringBuilder sql = new StringBuilder(120);
+    sql.append("UPDATE ");
+    sql.append(CONFLICT_VALUES[conflictAlgorithm]);
+    sql.append(table);
+    sql.append(" SET ");
+
+    // move all bind args to one array
+    int setValuesSize = values.size();
+    int bindArgsSize = (whereArgs == null) ? setValuesSize : (setValuesSize + whereArgs.length);
+    Object[] bindArgs = new Object[bindArgsSize];
+    int i = 0;
+    for (String colName : values.keySet()) {
+      sql.append((i > 0) ? "," : "");
+      sql.append(colName);
+      bindArgs[i++] = values.get(colName);
+      sql.append("=?");
+    }
+    if (whereArgs != null) {
+      for (i = setValuesSize; i < bindArgsSize; i++) {
+        bindArgs[i] = whereArgs[i - setValuesSize];
+      }
+    }
+    if (!isEmpty(whereClause)) {
+      sql.append(" WHERE ");
+      sql.append(whereClause);
+    }
+    SupportSQLiteStatement stmt = compileStatement(sql.toString());
+    SimpleSQLiteQuery.bind(stmt, bindArgs);
+    return stmt.executeUpdateDelete();
+
+/*
     return(safeDb.updateWithOnConflict(table, values, whereClause,
       stringify(whereArgs), conflictAlgorithm));
+*/
   }
 
   /**
@@ -426,6 +470,7 @@ class Database implements SupportSQLiteDatabase {
   public void close() {
     safeDb.close();
   }
+/*
 
   private String[] stringify(Object[] params) {
     String[] result=new String[params.length];
@@ -435,5 +480,10 @@ class Database implements SupportSQLiteDatabase {
     }
 
     return(result);
+  }
+*/
+
+  private static boolean isEmpty(String input) {
+    return input == null || input.length() == 0;
   }
 }

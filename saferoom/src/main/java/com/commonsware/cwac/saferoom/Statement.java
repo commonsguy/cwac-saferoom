@@ -28,91 +28,63 @@ class Statement implements SupportSQLiteStatement {
     this.safeStatement=safeStatement;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void execute() {
-    safeStatement.execute();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int executeUpdateDelete() {
-    return(safeStatement.executeUpdateDelete());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public long executeInsert() {
-    return(safeStatement.executeInsert());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public long simpleQueryForLong() {
-    return(safeStatement.simpleQueryForLong());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String simpleQueryForString() {
-    return(safeStatement.simpleQueryForString());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void bindNull(int index) {
     safeStatement.bindNull(index);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void bindLong(int index, long value) {
     safeStatement.bindLong(index, value);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void bindDouble(int index, double value) {
     safeStatement.bindDouble(index, value);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void bindString(int index, String value) {
     safeStatement.bindString(index, value);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void bindBlob(int index, byte[] value) {
     safeStatement.bindBlob(index, value);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void clearBindings() {
     safeStatement.clearBindings();
+  }
+
+  @Override
+  public void execute() {
+    safeStatement.execute();
+  }
+
+  @Override
+  public int executeUpdateDelete() {
+    return safeStatement.executeUpdateDelete();
+  }
+
+  @Override
+  public long executeInsert() {
+    return safeStatement.executeInsert();
+  }
+
+  @Override
+  public long simpleQueryForLong() {
+    return safeStatement.simpleQueryForLong();
+  }
+
+  @Override
+  public String simpleQueryForString() {
+    return safeStatement.simpleQueryForString();
+  }
+
+  @Override
+  public void close() throws Exception {
+    safeStatement.close();
   }
 }

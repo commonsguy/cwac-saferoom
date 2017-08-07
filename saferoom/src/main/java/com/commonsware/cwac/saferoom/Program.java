@@ -75,4 +75,12 @@ class Program implements SupportSQLiteProgram {
   public void clearBindings() {
     delegate.clearBindings();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void close() throws Exception {
+    delegate.close();
+  }
 }
