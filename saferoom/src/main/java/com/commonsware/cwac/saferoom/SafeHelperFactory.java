@@ -69,6 +69,6 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
   public SupportSQLiteOpenHelper create(
     SupportSQLiteOpenHelper.Configuration configuration) {
     return(new Helper(configuration.context, configuration.name,
-      configuration.version, configuration.callback, passphrase));
+      configuration.callback.version, configuration.callback, passphrase));
   }
 }
