@@ -237,6 +237,10 @@ class Database implements SupportSQLiteDatabase {
         Object[] bindArgsValue = (Object[]) bindArgs.get(supportQuery);
         count = bindArgsValue!=null?bindArgsValue.length:0;
       }
+      else {
+        throw new IllegalArgumentException("Unexpected SupportSQLiteQuery type: "
+          +supportQuery.getClass().getCanonicalName());
+      }
     }
     catch (Exception e) {
       throw new IllegalStateException("Um, ick", e);
@@ -323,11 +327,6 @@ class Database implements SupportSQLiteDatabase {
     SupportSQLiteStatement stmt = compileStatement(sql.toString());
     SimpleSQLiteQuery.bind(stmt, bindArgs);
     return stmt.executeUpdateDelete();
-
-/*
-    return(safeDb.updateWithOnConflict(table, values, whereClause,
-      stringify(whereArgs), conflictAlgorithm));
-*/
   }
 
   /**
@@ -470,18 +469,6 @@ class Database implements SupportSQLiteDatabase {
   public void close() {
     safeDb.close();
   }
-/*
-
-  private String[] stringify(Object[] params) {
-    String[] result=new String[params.length];
-
-    for (int i=0;i<params.length;i++) {
-      result[i]=params[i].toString();
-    }
-
-    return(result);
-  }
-*/
 
   private static boolean isEmpty(String input) {
     return input == null || input.length() == 0;
