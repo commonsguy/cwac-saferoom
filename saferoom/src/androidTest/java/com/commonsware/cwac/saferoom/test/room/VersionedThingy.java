@@ -14,10 +14,12 @@ package com.commonsware.cwac.saferoom.test.room;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.support.annotation.NonNull;
 import java.util.UUID;
 
 @Entity(tableName="thingy", primaryKeys={"id", "version_code"})
 public class VersionedThingy {
+  @NonNull
   public final String id;
 
   @ColumnInfo(name="version_code")
