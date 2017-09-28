@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:saferoom:0.0.3'
+    compile 'com.commonsware.cwac:saferoom:0.0.4'
 }
 ```
 
@@ -78,11 +78,11 @@ As one might expect, this project depends on SQLCipher for Android.
 This project also depends on the Room `runtime` artifact. Eventually, that
 will be downgraded to only depending on the `support-db` artifact, once
 we no longer need to use reflection with `RoomSQLiteQuery`
-[to get the argument count](https://issuetracker.google.com/issues/38481640#comment16).
+[to get the argument count](https://issuetracker.google.com/issues/67038952).
 
 Version
 -------
-This is version v0.0.3 of this module, meaning it still has that new-code smell.
+This is version v0.0.4 of this module, meaning it still has that new-code smell.
 
 Demo
 ----
@@ -135,6 +135,7 @@ of guidance here.
 
 Release Notes
 -------------
+- v0.0.4: raised Room dependencies to `1.0.0-beta1` and SQLCipher for Android to `3.5.7`
 - v0.0.3: raised Room dependencies to `1.0.0-alpha8`
 - v0.0.2: raised Room dependencies to `1.0.0-alpha5`
 - v0.0.1: initial release
