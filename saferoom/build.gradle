@@ -19,11 +19,11 @@ android {
 }
 
 dependencies {
-    compile 'net.zetetic:android-database-sqlcipher:3.5.6@aar'
-    compile "android.arch.persistence.room:runtime:1.0.0-alpha8"
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    compile "android.arch.persistence.room:runtime:1.0.0-beta1"
     androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile "android.arch.persistence.room:runtime:1.0.0-alpha8"
-    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha8"
+    androidTestCompile "android.arch.persistence.room:runtime:1.0.0-beta1"
+    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:1.0.0-beta1"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
