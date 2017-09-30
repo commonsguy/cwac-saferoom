@@ -18,7 +18,6 @@ import android.arch.persistence.db.SimpleSQLiteQuery;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.SupportSQLiteQuery;
 import android.arch.persistence.db.SupportSQLiteStatement;
-import android.arch.persistence.room.RoomSQLiteQuery;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -28,7 +27,6 @@ import android.util.Pair;
 import net.sqlcipher.database.SQLiteCursor;
 import net.sqlcipher.database.SQLiteCursorDriver;
 import net.sqlcipher.database.SQLiteQuery;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 
@@ -223,34 +221,9 @@ class Database implements SupportSQLiteDatabase {
   @Override
   public Cursor query(final SupportSQLiteQuery supportQuery,
                       CancellationSignal signal) {
-    int count=0;
+    BindingsRecorder hack=new BindingsRecorder();
 
-    try {
-      if (supportQuery instanceof RoomSQLiteQuery) {
-        Field argCount = RoomSQLiteQuery.class.getDeclaredField("mArgCount");
-        argCount.setAccessible(true);
-        count = argCount.getInt(supportQuery);
-      }
-      else if (supportQuery instanceof SimpleSQLiteQuery) {
-        Field bindArgs = SimpleSQLiteQuery.class.getDeclaredField("mBindArgs");
-        bindArgs.setAccessible(true);
-        Object[] bindArgsValue = (Object[]) bindArgs.get(supportQuery);
-        count = bindArgsValue!=null?bindArgsValue.length:0;
-      }
-      else {
-        throw new IllegalArgumentException("Unexpected SupportSQLiteQuery type: "
-          +supportQuery.getClass().getCanonicalName());
-      }
-    }
-    catch (Exception e) {
-      throw new IllegalStateException("Um, ick", e);
-    }
-
-    String[] fakeArgs=new String[count];
-
-    for (int i=0;i<count;i++) {
-      fakeArgs[i]="";
-    }
+    supportQuery.bindTo(hack);
 
     return(safeDb.rawQueryWithFactory(
       new net.sqlcipher.database.SQLiteDatabase.CursorFactory() {
@@ -262,7 +235,7 @@ class Database implements SupportSQLiteDatabase {
           supportQuery.bindTo(new Program(query));
           return new SQLiteCursor(db, masterQuery, editTable, query);
         }
-      }, supportQuery.getSql(), fakeArgs, null));
+      }, supportQuery.getSql(), hack.getBindings(), null));
   }
 
   /**
