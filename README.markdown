@@ -14,7 +14,7 @@ applications just yet.
 
 This Android library project is 
 [available as a JAR](https://github.com/commonsguy/cwac-saferoom/releases)
-or as an artifact for use with Gradle. To use that, add the following
+or as an artifact for use with Gradle. To use the artifact, add the following
 blocks to your `build.gradle` file:
 
 ```groovy
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:saferoom:0.0.4'
+    compile 'com.commonsware.cwac:saferoom:0.1.0'
 }
 ```
 
@@ -75,14 +75,16 @@ Dependencies
 ------------
 As one might expect, this project depends on SQLCipher for Android.
 
-This project also depends on the Room `runtime` artifact. Eventually, that
-will be downgraded to only depending on the `support-db` artifact, once
-we no longer need to use reflection with `RoomSQLiteQuery`
-[to get the argument count](https://issuetracker.google.com/issues/67038952).
+This project also depends upon `android.arch.persistence:db`, which is
+the support database API that Room uses. This project, as of 0.1.0,
+does not depend upon Room itself, as not all clients of the support database
+API will be using Room. You need to add your own dependencies upon Room
+or other database APIs if you want to use them.
 
 Version
 -------
-This is version v0.0.4 of this module, meaning it still has that new-code smell.
+This is version v0.1.0 of this module, meaning that it is still stumbling towards
+the light.
 
 Demo
 ----
@@ -135,6 +137,7 @@ of guidance here.
 
 Release Notes
 -------------
+- v0.1.0: eliminated Room dependency
 - v0.0.4: raised Room dependencies to `1.0.0-beta1` and SQLCipher for Android to `3.5.7`
 - v0.0.3: raised Room dependencies to `1.0.0-alpha8`
 - v0.0.2: raised Room dependencies to `1.0.0-alpha5`
