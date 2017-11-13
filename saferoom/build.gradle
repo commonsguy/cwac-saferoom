@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 15
@@ -20,10 +20,10 @@ android {
 
 dependencies {
     compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
-    compile "android.arch.persistence:db:1.0.0-beta1"
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile "android.arch.persistence.room:runtime:1.0.0-beta1"
-    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:1.0.0-beta1"
+    compile "android.arch.persistence:db:1.0.0"
+    androidTestCompile 'com.android.support.test:rules:1.0.1'
+    androidTestCompile "android.arch.persistence.room:runtime:1.0.0"
+    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
