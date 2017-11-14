@@ -250,13 +250,25 @@ class Database implements SupportSQLiteDatabase {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("ThrowFromFinallyBlock")
   @Override
   public int delete(String table, String whereClause, Object[] whereArgs) {
     String query = "DELETE FROM " + table
       + (isEmpty(whereClause) ? "" : " WHERE " + whereClause);
     SupportSQLiteStatement statement = compileStatement(query);
-    SimpleSQLiteQuery.bind(statement, whereArgs);
-    return statement.executeUpdateDelete();
+
+    try {
+      SimpleSQLiteQuery.bind(statement, whereArgs);
+      return statement.executeUpdateDelete();
+    }
+    finally {
+      try {
+        statement.close();
+      }
+      catch (Exception e) {
+        throw new RuntimeException("Exception attempting to close statement", e);
+      }
+    }
 
 //    return(safeDb.delete(table, whereClause, stringify(whereArgs)));
   }
@@ -297,9 +309,20 @@ class Database implements SupportSQLiteDatabase {
       sql.append(" WHERE ");
       sql.append(whereClause);
     }
-    SupportSQLiteStatement stmt = compileStatement(sql.toString());
-    SimpleSQLiteQuery.bind(stmt, bindArgs);
-    return stmt.executeUpdateDelete();
+    SupportSQLiteStatement statement = compileStatement(sql.toString());
+
+    try {
+      SimpleSQLiteQuery.bind(statement, bindArgs);
+      return statement.executeUpdateDelete();
+    }
+    finally {
+      try {
+        statement.close();
+      }
+      catch (Exception e) {
+        throw new RuntimeException("Exception attempting to close statement", e);
+      }
+    }
   }
 
   /**
