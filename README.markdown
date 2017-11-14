@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:saferoom:0.1.1'
+    compile "com.commonsware.cwac:saferoom:0.1.2"
 }
 ```
 
@@ -83,7 +83,7 @@ or other database APIs if you want to use them.
 
 Version
 -------
-This is version v0.1.1 of this module, meaning that it is still stumbling towards
+This is version v0.1.2 of this module, meaning that it is still stumbling towards
 the light.
 
 Demo
@@ -137,6 +137,7 @@ of guidance here.
 
 Release Notes
 -------------
+- v0.1.2: fixed [issue #3](https://github.com/commonsguy/cwac-saferoom/issues/3), related to closing statements
 - v0.1.1: updated support database dependency to `1.0.0`
 - v0.1.0: eliminated Room dependency
 - v0.0.4: raised Room dependencies to `1.0.0-beta1` and SQLCipher for Android to `3.5.7`
