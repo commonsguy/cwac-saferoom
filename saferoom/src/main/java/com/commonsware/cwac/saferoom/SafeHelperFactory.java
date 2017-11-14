@@ -15,6 +15,7 @@
 package com.commonsware.cwac.saferoom;
 
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
+import android.content.Context;
 import android.text.Editable;
 
 /**
@@ -68,7 +69,12 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
   @Override
   public SupportSQLiteOpenHelper create(
     SupportSQLiteOpenHelper.Configuration configuration) {
-    return(new Helper(configuration.context, configuration.name,
-      configuration.callback.version, configuration.callback, passphrase));
+    return(create(configuration.context, configuration.name,
+      configuration.callback.version, configuration.callback));
+  }
+
+  public SupportSQLiteOpenHelper create(Context context, String name, int version,
+                                        SupportSQLiteOpenHelper.Callback callback) {
+    return(new Helper(context, name, version, callback, passphrase));
   }
 }
