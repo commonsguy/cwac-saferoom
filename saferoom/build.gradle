@@ -19,9 +19,9 @@ android {
 }
 
 dependencies {
-    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    compile "net.zetetic:android-database-sqlcipher:3.5.7@aar"
     compile "android.arch.persistence:db:1.0.0"
-    androidTestCompile 'com.android.support.test:rules:1.0.1'
+    androidTestCompile "com.android.support.test:rules:1.0.1"
     androidTestCompile "android.arch.persistence.room:runtime:1.0.0"
     androidTestAnnotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 }
