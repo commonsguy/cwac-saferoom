@@ -13,6 +13,8 @@ package com.commonsware.cwac.saferoom.test;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.text.SpannableStringBuilder;
@@ -21,6 +23,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import java.util.ArrayList;
+import java.util.UUID;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class DirectTests {
@@ -54,9 +59,49 @@ public class DirectTests {
   @Test
   public void basicOps() {
     SupportSQLiteDatabase db=helper.getWritableDatabase();
+    ContentValues cv=new ContentValues(7);
+
+    cv.put("postalCode", "90120");
+    cv.put("tags", "");
+    cv.put("latitude", 37.386052);
+    cv.put("longitude", -122.083851);
+
+    for (int i=0;i<1024;i++) {
+      cv.put("id", UUID.randomUUID().toString());
+      cv.put("displayName", "Customer #"+(i+1));
+      cv.put("creationDate", System.currentTimeMillis());
+
+      db.insert("Customer", 0, cv);
+    }
+
+    Cursor c=db.query("SELECT DISTINCT id FROM Customer");
+
+    assertEquals(1024, c.getCount());
+
+    ArrayList<String> ids=new ArrayList<>();
+
+    while (c.moveToNext()) {
+      ids.add(c.getString(0));
+    }
+
+    assertEquals(1024, ids.size());
+    cv.clear();
+
+    for (int i=0;i<1024;i++) {
+      cv.put("tags", "foo");
+      db.update("Customer", 0, cv, "id=?", new String[] {ids.get(i)});
+    }
+
+    c=db.query("SELECT DISTINCT id FROM Customer");
+    assertEquals(1024, c.getCount());
+    c=db.query("SELECT DISTINCT id FROM Customer WHERE tags='foo'");
+    assertEquals(1024, c.getCount());
 
     for (int i=0;i<1024;i++) {
       db.delete("Customer", null, null);
     }
+
+    c=db.query("SELECT DISTINCT id FROM Customer");
+    assertEquals(0, c.getCount());
   }
 }
