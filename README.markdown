@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.commonsware.cwac:saferoom:0.1.3"
+    compile "com.commonsware.cwac:saferoom:0.2.0"
 }
 ```
 
@@ -71,6 +71,40 @@ that you get from `getText()` on the `EditText`.
 SafeRoom will zero out the `char[]` once the database is opened. If you use
 `fromUser()`, SafeRoom will also clear the contents of the `Editable`.
 
+## Encrypting Existing Databases
+
+If you have an existing SQLite database &mdash; created with Room or
+otherwise &mdash; the `SQLCipherUtils` class has `getDatabaseState()`
+and `encrypt()` methods for you.
+
+`getDatabaseState()` returns a `State` object indicating whether a database
+is `ENCRYPTED`, `UNENCRYPTED`, or `DOES_NOT_EXIST`. The determination
+of whether the database is unencrypted is based on whether we can open it
+without a passphrase. There are two versions of `getDatabaseState()`:
+
+- `getDatabaseState(Context, String)` for a `Context` and database name
+
+- `getDatabaseState(File)`, where the `File` points to the database
+
+`encrypt()` will take an unencrypted database as input and encrypt it
+using the supplied passphrase. Technically, it will encrypt a copy
+of the database, then delete the unencrypted one and rename the copy to
+the original name. There are three versions of `encrypt()`:
+
+- `encrypt(Context, String, Editable)` where the `String` is the database
+name and the `Editable` is the passphrase (e.g., from `getText()` on
+an `EditText`)
+
+- `encrypt(Context, String, char[])` where the `String` is the database
+name and the `char[]` is the passphrase
+
+- `encrypt(Context, File, char[])` where the `File` points to the database
+and the `char[]` is the passphrase
+
+The passphrase is left untouched by `encrypt()`, so you can turn around and
+use it with `SafeHelperFactory`. If you are not planning on opening the database,
+please clear out the passphrase after `encrypt()` returns.
+
 Dependencies
 ------------
 As one might expect, this project depends on SQLCipher for Android.
@@ -83,8 +117,9 @@ or other database APIs if you want to use them.
 
 Version
 -------
-This is version v0.1.3 of this module, meaning that it is still stumbling towards
-the light.
+This is version v0.2.0 of this module, meaning that it is slowly gaining steam.
+
+(note: no actual steam is used in this library)
 
 Demo
 ----
@@ -137,6 +172,7 @@ of guidance here.
 
 Release Notes
 -------------
+- v0.2.0: added `SQLCipherUtils` to [help encrypt existing databases](https://github.com/commonsguy/cwac-saferoom/issues/6)
 - v0.1.3: upgraded to Android Gradle Plugin 3.0.0, set transitive dependencies to `api`
 - v0.1.2: fixed [issue #3](https://github.com/commonsguy/cwac-saferoom/issues/3), related to closing statements
 - v0.1.1: updated support database dependency to `1.0.0`
