@@ -74,7 +74,7 @@ public class DirectTests {
       db.insert("Customer", 0, cv);
     }
 
-    Cursor c=db.query("SELECT DISTINCT id FROM Customer");
+    Cursor c=db.query("SELECT DISTINCT id FROM Customer", null);
 
     assertEquals(1024, c.getCount());
 
