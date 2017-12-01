@@ -26,7 +26,7 @@ import android.content.Context;
 abstract public class StuffDatabase extends RoomDatabase {
   abstract public StuffStore stuffStore();
 
-  private static final String DB_NAME="stuff.db";
+  public static final String DB_NAME="stuff.db";
 
   public static StuffDatabase build(Context ctxt, boolean memoryOnly,
                                     SupportSQLiteOpenHelper.Factory f) {
