@@ -140,6 +140,10 @@ The code in this project is licensed under the Apache
 Software License 2.0, per the terms of the included LICENSE
 file.
 
+The SQL Brite tests in `androidTest/` are from
+[the SQL Brite project](https://github.com/square/sqlbrite) and are licensed
+under the Apache Software License 2.0.
+
 Questions
 ---------
 If you have questions regarding the use of this code, please post a question
@@ -185,4 +189,3 @@ Release Notes
 Who Made This?
 --------------
 <a href="http://commonsware.com">![CommonsWare](http://commonsware.com/images/logo.png)</a>
-
