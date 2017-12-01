@@ -105,6 +105,10 @@ The passphrase is left untouched by `encrypt()`, so you can turn around and
 use it with `SafeHelperFactory`. If you are not planning on opening the database,
 please clear out the passphrase after `encrypt()` returns.
 
+Only call `encrypt()` when the database is closed. Ideally, call `encrypt()`
+before opening the database in Room. At minimum, call `close()` on your
+`RoomDatabase` before calling `encrypt()`.
+
 Dependencies
 ------------
 As one might expect, this project depends on SQLCipher for Android.
