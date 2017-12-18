@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.commonsware.cwac:saferoom:0.2.0"
+    compile "com.commonsware.cwac:saferoom:0.2.1"
 }
 ```
 
@@ -121,7 +121,7 @@ or other database APIs if you want to use them.
 
 Version
 -------
-This is version v0.2.0 of this module, meaning that it is slowly gaining steam.
+This is version v0.2.1 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -180,6 +180,7 @@ of guidance here.
 
 Release Notes
 -------------
+- v0.2.1: added temporary implementation of `getDatabaseName()` to `Helper`
 - v0.2.0: added `SQLCipherUtils` to [help encrypt existing databases](https://github.com/commonsguy/cwac-saferoom/issues/6)
 - v0.1.3: upgraded to Android Gradle Plugin 3.0.0, set transitive dependencies to `api`
 - v0.1.2: fixed [issue #3](https://github.com/commonsguy/cwac-saferoom/issues/3), related to closing statements
