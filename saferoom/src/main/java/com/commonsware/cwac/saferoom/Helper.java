@@ -32,12 +32,14 @@ import java.io.IOException;
 class Helper implements SupportSQLiteOpenHelper {
   private final OpenHelper delegate;
   private final char[] passphrase;
+  private final String name;
 
   Helper(Context context, String name, int version,
          SupportSQLiteOpenHelper.Callback callback, char[] passphrase) {
     SQLiteDatabase.loadLibs(context);
     delegate=createDelegate(context, name, version, callback);
     this.passphrase=passphrase;
+    this.name=name;
   }
 
   private OpenHelper createDelegate(Context context, String name,
@@ -88,8 +90,9 @@ class Helper implements SupportSQLiteOpenHelper {
    */
   @Override
   public String getDatabaseName() {
+    return name;
     // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
+//    throw new UnsupportedOperationException("I kinna do it, cap'n!");
 //    return delegate.getDatabaseName();
   }
 
