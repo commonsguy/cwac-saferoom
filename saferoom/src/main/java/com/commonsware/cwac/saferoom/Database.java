@@ -116,7 +116,11 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public boolean inTransaction() {
-    return(safeDb.inTransaction());
+    if (safeDb.isOpen()) {
+      return(safeDb.inTransaction());
+    }
+
+    throw new IllegalStateException("You should not be doing this on a closed database");
   }
 
   /**
@@ -124,7 +128,11 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public boolean isDbLockedByCurrentThread() {
-    return(safeDb.isDbLockedByCurrentThread());
+    if (safeDb.isOpen()) {
+      return(safeDb.isDbLockedByCurrentThread());
+    }
+
+    throw new IllegalStateException("You should not be doing this on a closed database");
   }
 
   /**
@@ -132,7 +140,11 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public boolean yieldIfContendedSafely() {
-    return(safeDb.yieldIfContendedSafely());
+    if (safeDb.isOpen()) {
+      return(safeDb.yieldIfContendedSafely());
+    }
+
+    throw new IllegalStateException("You should not be doing this on a closed database");
   }
 
   /**
@@ -140,7 +152,11 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public boolean yieldIfContendedSafely(long sleepAfterYieldDelay) {
-    return(safeDb.yieldIfContendedSafely(sleepAfterYieldDelay));
+    if (safeDb.isOpen()) {
+      return(safeDb.yieldIfContendedSafely(sleepAfterYieldDelay));
+    }
+
+    throw new IllegalStateException("You should not be doing this on a closed database");
   }
 
   /**
