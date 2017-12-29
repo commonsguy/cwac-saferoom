@@ -26,10 +26,7 @@ dependencies {
     api "net.zetetic:android-database-sqlcipher:3.5.7@aar"
     api "android.arch.persistence:db:1.0.0"
     androidTestImplementation "com.android.support.test:rules:1.0.1"
-    androidTestImplementation "android.arch.persistence.room:runtime:1.0.0"
-    androidTestImplementation "com.squareup.sqlbrite3:sqlbrite:3.0.0"
-    androidTestImplementation "com.google.truth:truth:0.36"
-    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    androidTestImplementation "com.commonsware.misc:support-db-tests:0.1.0"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
