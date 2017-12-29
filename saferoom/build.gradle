@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    api "net.zetetic:android-database-sqlcipher:3.5.7@aar"
+    api "net.zetetic:android-database-sqlcipher:3.5.9@aar"
     api "android.arch.persistence:db:1.0.0"
     androidTestImplementation "com.android.support.test:rules:1.0.1"
     androidTestImplementation "com.commonsware.misc:support-db-tests:0.1.0"
