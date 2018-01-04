@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.commonsware.cwac:saferoom:0.2.1"
+    implementation "com.commonsware.cwac:saferoom:0.3.0"
 }
 ```
 
@@ -108,6 +108,21 @@ Only call `encrypt()` when the database is closed. Ideally, call `encrypt()`
 before opening the database in Room. At minimum, call `close()` on your
 `RoomDatabase` before calling `encrypt()`.
 
+### Changing the Passphrase
+
+If you want to change the passphrase for an existing database:
+
+- Open it in writeable mode
+
+- Call `SafeHelperFactory.rekey()`, supplying that database plus either a
+`char[]` or an `Editable` reflecting the new passphrase to use
+
+Note that this does *not* encrypt an unencrypted database. Use the `encrypt()`
+option listed above for that.
+
+The `Editable` will be cleared as part of this work, but the `char[]` will
+not be zero'd out. Please clear that array as soon as you are done with it.
+
 ## Dependencies
 
 As one might expect, this project depends on SQLCipher for Android.
@@ -120,12 +135,14 @@ or other database APIs if you want to use them.
 
 ## Tests
 
-This project implements the test suite published separately as
-[`support-db-tests`](https://gitlab.com/commonsguy/support-db-tests). The
-`SafeRoomCompatTestSuite` in the `androidTest/` source set is a SafeRoom-specific
-subclass of `CompatTestSuite`, supplying a suitable `SafeHelperFactory`
-for the tests. The actual test implementation is from `support-db-tests`, which
-can test any implementation of the support database API.
+This project has two sources of tests. Some are local to the project. The
+rest come from the [`support-db-tests`](https://gitlab.com/commonsguy/support-db-tests)
+project. That project contains tests that exercise any support database API
+implementation.
+
+TL;DR: to run the full set of CWAC-SafeRoom tests, use `SafeRoomSuite`.
+Either run that directly from your IDE, or set up a run configuration pointing
+to it, etc.
 
 ## Version
 
@@ -186,6 +203,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.3.0: added `rekey()`, upgraded to SQLCipher for Android 3.5.9, replaced tests
 - v0.2.1: added temporary implementation of `getDatabaseName()` to `Helper`
 - v0.2.0: added `SQLCipherUtils` to [help encrypt existing databases](https://github.com/commonsguy/cwac-saferoom/issues/6)
 - v0.1.3: upgraded to Android Gradle Plugin 3.0.0, set transitive dependencies to `api`
