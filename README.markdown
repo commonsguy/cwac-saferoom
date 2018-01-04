@@ -1,5 +1,4 @@
-CWAC-SafeRoom: A Room<->SQLCipher for Android Bridge
-==========================================
+# CWAC-SafeRoom: A Room<->SQLCipher for Android Bridge
 
 This project implements the `Support...` series of classes and interfaces
 that [Room](https://developer.android.com/topic/libraries/architecture/room.html)
@@ -32,8 +31,8 @@ dependencies {
 Or, if you cannot use SSL, use `http://repo.commonsware.com` for the repository
 URL.
 
-Usage
------
+## Usage
+
 When you use Room, you use `Room.databaseBuilder()` or `Room.inMemoryDatabaseBuilder()`
 to get a `RoomDatabase.Builder`. After configuring that object, you call
 `build()` to get an instance of your custom subclass of `RoomDatabase`, whichever
@@ -57,7 +56,7 @@ StuffDatabase db=Room.databaseBuilder(ctxt, StuffDatabase.class, DB_NAME)
   .build();
 ```
 
-## Passphrase Management
+### Supplying a Passphrase
 
 A cardinal rule of passphrases in Java is: do not hold them in `String`
 objects. You have no means of clearing those from memory, as a `String`
@@ -71,7 +70,7 @@ that you get from `getText()` on the `EditText`.
 SafeRoom will zero out the `char[]` once the database is opened. If you use
 `fromUser()`, SafeRoom will also clear the contents of the `Editable`.
 
-## Encrypting Existing Databases
+### Encrypting Existing Databases
 
 If you have an existing SQLite database &mdash; created with Room or
 otherwise &mdash; the `SQLCipherUtils` class has `getDatabaseState()`
@@ -109,8 +108,8 @@ Only call `encrypt()` when the database is closed. Ideally, call `encrypt()`
 before opening the database in Room. At minimum, call `close()` on your
 `RoomDatabase` before calling `encrypt()`.
 
-Dependencies
-------------
+## Dependencies
+
 As one might expect, this project depends on SQLCipher for Android.
 
 This project also depends upon `android.arch.persistence:db`, which is
@@ -119,37 +118,44 @@ does not depend upon Room itself, as not all clients of the support database
 API will be using Room. You need to add your own dependencies upon Room
 or other database APIs if you want to use them.
 
-Version
--------
-This is version v0.2.1 of this module, meaning that it is slowly gaining steam.
+## Tests
+
+This project implements the test suite published separately as
+[`support-db-tests`](https://gitlab.com/commonsguy/support-db-tests). The
+`SafeRoomCompatTestSuite` in the `androidTest/` source set is a SafeRoom-specific
+subclass of `CompatTestSuite`, supplying a suitable `SafeHelperFactory`
+for the tests. The actual test implementation is from `support-db-tests`, which
+can test any implementation of the support database API.
+
+## Version
+
+This is version v0.2.2 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
-Demo
-----
-Right now, there is no demo project, though you can putter around the instrumentation
-tests.
+## Demo
 
-Additional Documentation
-------------------------
+Right now, there is no demo project.
+
+## Additional Documentation
+
 [JavaDocs are available](http://javadocs.commonsware.com/cwac/saferoom/index.html),
 though most of the library is not `public`, as it does not need to be.
 
 [Android's Architecture Components](https://commonsware.com/AndroidArch)
 contains a chapter dedicated to SafeRoom.
 
-License
--------
+## License
+
 The code in this project is licensed under the Apache
 Software License 2.0, per the terms of the included LICENSE
-file.
+file. The copyrights are owned by CommonsWare for things unique to this
+library and a combination of CommonsWare and the Android Open Source
+Project for code modified from the Architecture Components' `Framework*`
+set of classes.
 
-The SQL Brite tests in `androidTest/` are from
-[the SQL Brite project](https://github.com/square/sqlbrite) and are licensed
-under the Apache Software License 2.0.
+## Questions
 
-Questions
----------
 If you have questions regarding the use of this code, please post a question
 on [Stack Overflow](http://stackoverflow.com/questions/ask) tagged with
 `commonsware-cwac` and `android` after [searching to see if there already is an answer](https://stackoverflow.com/search?q=[commonsware-cwac]+saferoom). Be sure to indicate
@@ -178,8 +184,8 @@ the fence may work, but it may not.
 Again, the [contribution guidelines](CONTRIBUTING.md) provide a bit
 of guidance here.
 
-Release Notes
--------------
+## Release Notes
+
 - v0.2.1: added temporary implementation of `getDatabaseName()` to `Helper`
 - v0.2.0: added `SQLCipherUtils` to [help encrypt existing databases](https://github.com/commonsguy/cwac-saferoom/issues/6)
 - v0.1.3: upgraded to Android Gradle Plugin 3.0.0, set transitive dependencies to `api`
@@ -191,6 +197,6 @@ Release Notes
 - v0.0.2: raised Room dependencies to `1.0.0-alpha5`
 - v0.0.1: initial release
 
-Who Made This?
---------------
+## Who Made This?
+
 <a href="http://commonsware.com">![CommonsWare](http://commonsware.com/images/logo.png)</a>
