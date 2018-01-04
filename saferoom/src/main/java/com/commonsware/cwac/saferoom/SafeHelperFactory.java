@@ -14,6 +14,7 @@
 
 package com.commonsware.cwac.saferoom;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
 import android.content.Context;
 import android.text.Editable;
@@ -37,14 +38,57 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
    */
   public static SafeHelperFactory fromUser(Editable editor) {
     char[] passphrase=new char[editor.length()];
+    SafeHelperFactory result;
 
     editor.getChars(0, editor.length(), passphrase, 0);
 
-    SafeHelperFactory result=new SafeHelperFactory(passphrase);
-
-    editor.clear();
+    try {
+      result=new SafeHelperFactory(passphrase);
+    }
+    finally {
+      editor.clear();
+    }
 
     return(result);
+  }
+
+  /**
+   * Changes the passphrase associated with this database. The
+   * char[] is *not* cleared by this method -- please zero it
+   * out if you are done with it.
+   *
+   * This will not encrypt an unencrypted database. Please use the
+   * encrypt() method for that.
+   *
+   * @param db the database to rekey
+   * @param passphrase the new passphrase to use
+   */
+  public static void rekey(SupportSQLiteDatabase db, char[] passphrase) {
+    if (db instanceof Database) {
+      ((Database)db).rekey(passphrase);
+    }
+    else {
+      throw new IllegalArgumentException("Database is not from CWAC-SafeRoom");
+    }
+  }
+
+  /**
+   * Changes the passphrase associated with this database. The supplied
+   * Editable is cleared as part of this operation.
+   *
+   * This will not encrypt an unencrypted database. Please use the
+   * encrypt() method for that.
+   *
+   * @param db the database to rekey
+   * @param editor source of passphrase, presumably from a user
+   */
+  public static void rekey(SupportSQLiteDatabase db, Editable editor) {
+    if (db instanceof Database) {
+      ((Database)db).rekey(editor);
+    }
+    else {
+      throw new IllegalArgumentException("Database is not from CWAC-SafeRoom");
+    }
   }
 
   /**

@@ -23,6 +23,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteTransactionListener;
 import android.os.CancellationSignal;
+import android.text.Editable;
 import android.util.Pair;
 import net.sqlcipher.database.SQLiteCursor;
 import net.sqlcipher.database.SQLiteCursorDriver;
@@ -480,6 +481,36 @@ class Database implements SupportSQLiteDatabase {
   @Override
   public void close() {
     safeDb.close();
+  }
+
+  /**
+   * Changes the passphrase associated with this database. The
+   * char[] is *not* cleared by this method -- please zero it
+   * out if you are done with it.
+   *
+   * @param passphrase the new passphrase to use
+   */
+  public void rekey(char[] passphrase) {
+    execSQL(String.format("PRAGMA rekey='%s'", new String(passphrase)));
+  }
+
+  /**
+   * Changes the passphrase associated with this database. The supplied
+   * Editable is cleared as part of this operation.
+   *
+   * @param editor source of passphrase, presumably from a user
+   */
+  public void rekey(Editable editor) {
+    char[] passphrase=new char[editor.length()];
+
+    editor.getChars(0, editor.length(), passphrase, 0);
+
+    try {
+      rekey(passphrase);
+    }
+    finally {
+      editor.clear();
+    }
   }
 
   private static boolean isEmpty(String input) {
