@@ -491,7 +491,7 @@ class Database implements SupportSQLiteDatabase {
    * @param passphrase the new passphrase to use
    */
   public void rekey(char[] passphrase) {
-    execSQL(String.format("PRAGMA rekey='%s'", new String(passphrase)));
+    safeDb.changePassword(passphrase);
   }
 
   /**
