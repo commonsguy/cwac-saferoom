@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.3.0"
+    implementation "com.commonsware.cwac:saferoom:0.3.1"
 }
 ```
 
@@ -146,7 +146,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.2.2 of this module, meaning that it is slowly gaining steam.
+This is version v0.3.1 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -203,6 +203,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.3.1: changed `rekey()` to use the existing `changePassword()`
 - v0.3.0: added `rekey()`, upgraded to SQLCipher for Android 3.5.9, replaced tests
 - v0.2.1: added temporary implementation of `getDatabaseName()` to `Helper`
 - v0.2.0: added `SQLCipherUtils` to [help encrypt existing databases](https://github.com/commonsguy/cwac-saferoom/issues/6)
