@@ -18,7 +18,6 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.db.SupportSQLiteOpenHelper;
 import android.content.Context;
 import android.text.Editable;
-import java.io.File;
 
 /**
  * SupportSQLiteOpenHelper.Factory implementation, for use with Room
