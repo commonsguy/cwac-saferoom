@@ -170,4 +170,49 @@ public class SQLCipherUtils {
       newFile.renameTo(originalFile);
     }
   }
+
+  /**
+   * Replaces this database with a decrypted version, deleting the original
+   * encrypted database. Do not call this while the database is open, which
+   * includes during any Room migrations.
+   *
+   * The passphrase is untouched in this call. Please set all bytes of the
+   * passphrase to 0 or something to clear out the passphrase if you are done
+   * with it.
+   *
+   * @param ctxt a Context
+   * @param originalFile a File pointing to the encrypted database
+   * @param passphrase the passphrase from the user for the encrypted database
+   * @throws IOException
+   */
+  public static void decrypt(Context ctxt, File originalFile, char[] passphrase)
+    throws IOException {
+    SQLiteDatabase.loadLibs(ctxt);
+
+    if (originalFile.exists()) {
+      File newFile=
+        File.createTempFile("sqlcipherutils", "tmp",
+          ctxt.getCacheDir());
+      SQLiteDatabase db=
+        SQLiteDatabase.openDatabase(originalFile.getAbsolutePath(),
+          passphrase, null, SQLiteDatabase.OPEN_READWRITE);
+
+      db.rawExecSQL("ATTACH DATABASE '"+newFile.getAbsolutePath()+
+        "' AS plaintext KEY ''");
+      db.rawExecSQL("SELECT sqlcipher_export('plaintext')");
+      db.rawExecSQL("DETACH DATABASE plaintext");
+
+      int version=db.getVersion();
+
+      db.close();
+
+      db=SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), "",
+        null, SQLiteDatabase.OPEN_READWRITE);
+      db.setVersion(version);
+      db.close();
+
+      originalFile.delete();
+      newFile.renameTo(originalFile);
+    }
+  }
 }

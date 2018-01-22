@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.3.1"
+    implementation "com.commonsware.cwac:saferoom:0.3.2"
 }
 ```
 
@@ -123,6 +123,14 @@ option listed above for that.
 The `Editable` will be cleared as part of this work, but the `char[]` will
 not be zero'd out. Please clear that array as soon as you are done with it.
 
+### Decrypting Existing Databases
+
+You can call `decrypt()` on `SQLCipherUtils` to decrypt an existing
+SQLCipher-encrypted database. Supply the `Context`, the `File` pointing
+to the database, and a `char[]` with the passphrase. `decrypt()` will
+replace the encrypted database with a decrypted one, so that database can
+be opened using ordinary SQLite.
+
 ## Dependencies
 
 As one might expect, this project depends on SQLCipher for Android.
@@ -146,7 +154,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.3.1 of this module, meaning that it is slowly gaining steam.
+This is version v0.3.2 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -203,6 +211,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.3.2: added `decrypt()` utility method
 - v0.3.1: changed `rekey()` to use the existing `changePassword()`
 - v0.3.0: added `rekey()`, upgraded to SQLCipher for Android 3.5.9, replaced tests
 - v0.2.1: added temporary implementation of `getDatabaseName()` to `Helper`
