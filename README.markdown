@@ -141,6 +141,8 @@ does not depend upon Room itself, as not all clients of the support database
 API will be using Room. You need to add your own dependencies upon Room
 or other database APIs if you want to use them.
 
+Presently, CWAC-SafeRoom works with `1.0.0` of the Architecture Components.
+
 ## Tests
 
 This project has two sources of tests. Some are local to the project. The
