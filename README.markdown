@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.3.2"
+    implementation "com.commonsware.cwac:saferoom:0.3.3"
 }
 ```
 
@@ -156,7 +156,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.3.2 of this module, meaning that it is slowly gaining steam.
+This is version v0.3.3 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -213,6 +213,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.3.3: added WAL support, with an assist from [plackemacher](https://github.com/commonsguy/cwac-saferoom/pull/20)
 - v0.3.2: added `decrypt()` utility method
 - v0.3.1: changed `rekey()` to use the existing `changePassword()`
 - v0.3.0: added `rekey()`, upgraded to SQLCipher for Android 3.5.9, replaced tests
