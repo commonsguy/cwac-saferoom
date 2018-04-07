@@ -428,7 +428,7 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public void disableWriteAheadLogging() {
-    safeDb.rawExecSQL("PRAGMA journal_mode=DELETE;");
+    safeDb.rawExecSQL("PRAGMA journal_mode=TRUNCATE;");
   }
 
   /**
