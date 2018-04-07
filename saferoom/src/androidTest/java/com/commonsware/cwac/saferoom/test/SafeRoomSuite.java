@@ -7,7 +7,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
   SafeRoomCompatTestSuite.class,
   RekeyTest.class,
-  DecryptTest.class
+  DecryptTest.class,
+  WALTest.class
 })
 public class SafeRoomSuite {
 }
