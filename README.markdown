@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.3.4"
+    implementation "com.commonsware.cwac:saferoom:0.4.0"
 }
 ```
 
@@ -141,7 +141,8 @@ does not depend upon Room itself, as not all clients of the support database
 API will be using Room. You need to add your own dependencies upon Room
 or other database APIs if you want to use them.
 
-Presently, CWAC-SafeRoom works with `1.0.0` of the Architecture Components.
+Presently, CWAC-SafeRoom works with `1.1.0` of the support database API
+from the Architecture Components.
 
 ## Tests
 
@@ -156,7 +157,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.3.4 of this module, meaning that it is slowly gaining steam.
+This is version v0.4.0 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -213,6 +214,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.4.0: updated to `1.1.0` of the support database API
 - v0.3.4: changed non-WAL journal mode to TRUNCATE
 - v0.3.3: added WAL support, with an assist from [plackemacher](https://github.com/commonsguy/cwac-saferoom/pull/20)
 - v0.3.2: added `decrypt()` utility method

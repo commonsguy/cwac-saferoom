@@ -80,7 +80,7 @@ class Program implements SupportSQLiteProgram {
    * {@inheritDoc}
    */
   @Override
-  public void close() throws Exception {
+  public void close() {
     delegate.close();
   }
 }

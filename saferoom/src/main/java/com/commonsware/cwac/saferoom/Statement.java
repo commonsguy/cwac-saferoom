@@ -144,7 +144,7 @@ class Statement implements SupportSQLiteStatement {
    * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
-  public void close() throws Exception {
+  public void close() {
     safeStatement.close();
   }
 }
