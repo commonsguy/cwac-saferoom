@@ -1,5 +1,6 @@
 package com.commonsware.cwac.saferoom.test;
 
+import com.commonsware.cwac.saferoom.test.room.DaoTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -8,7 +9,8 @@ import org.junit.runners.Suite;
   SafeRoomCompatTestSuite.class,
   RekeyTest.class,
   DecryptTest.class,
-  WALTest.class
+  WALTest.class,
+  DaoTests.class
 })
 public class SafeRoomSuite {
 }

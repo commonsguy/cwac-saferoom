@@ -22,11 +22,15 @@ android {
     }
 }
 
+def roomVer="1.1.0"
+
 dependencies {
     api "net.zetetic:android-database-sqlcipher:3.5.9@aar"
-    api "android.arch.persistence:db:1.1.0"
+    api "android.arch.persistence:db:$roomVer"
+    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:$roomVer"
     androidTestImplementation "com.android.support.test:rules:1.0.2"
     androidTestImplementation "com.commonsware.misc:support-db-tests:0.2.0"
+    androidTestImplementation "android.arch.persistence.room:runtime:$roomVer"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
