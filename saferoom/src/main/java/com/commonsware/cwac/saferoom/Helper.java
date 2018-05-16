@@ -104,9 +104,8 @@ class Helper implements SupportSQLiteOpenHelper {
   @Override
   @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
   public void setWriteAheadLoggingEnabled(boolean enabled) {
-    // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
-//    delegate.setWriteAheadLoggingEnabled(enabled);
+    // throw new UnsupportedOperationException("I kinna do it, cap'n!");
+    delegate.setWriteAheadLoggingEnabled(enabled);
   }
 
   /**
@@ -149,6 +148,7 @@ class Helper implements SupportSQLiteOpenHelper {
 
   abstract static class OpenHelper extends SQLiteOpenHelper {
     private Database wrappedDb;
+    private Boolean walEnabled;
 
     OpenHelper(Context context, String name, int version) {
       super(context, name, null, version, null);
@@ -163,9 +163,24 @@ class Helper implements SupportSQLiteOpenHelper {
     Database getWrappedDb(SQLiteDatabase db) {
       if (wrappedDb==null) {
         wrappedDb=new Database(db);
+
+        if (walEnabled!=null) {
+          setupWAL(wrappedDb);
+        }
       }
 
       return(wrappedDb);
+    }
+
+    private void setupWAL(Database db) {
+      if (!db.isReadOnly()) {
+        if (walEnabled) {
+          db.enableWriteAheadLogging();
+        }
+        else {
+          db.disableWriteAheadLogging();
+        }
+      }
     }
 
     /**
@@ -176,6 +191,14 @@ class Helper implements SupportSQLiteOpenHelper {
       super.close();
       wrappedDb.close();
       wrappedDb=null;
+    }
+
+    void setWriteAheadLoggingEnabled(boolean writeAheadLoggingEnabled) {
+      walEnabled=writeAheadLoggingEnabled;
+
+      if (wrappedDb!=null) {
+        setupWAL(wrappedDb);
+      }
     }
   }
 }
