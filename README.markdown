@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.4.0"
+    implementation "com.commonsware.cwac:saferoom:0.4.1"
 }
 ```
 
@@ -157,7 +157,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.4.0 of this module, meaning that it is slowly gaining steam.
+This is version v0.4.1 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -214,6 +214,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.4.1: added Room-specific tests, fixed [WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/17)
 - v0.4.0: updated to `1.1.0` of the support database API
 - v0.3.4: changed non-WAL journal mode to TRUNCATE
 - v0.3.3: added WAL support, with an assist from [plackemacher](https://github.com/commonsguy/cwac-saferoom/pull/20)
