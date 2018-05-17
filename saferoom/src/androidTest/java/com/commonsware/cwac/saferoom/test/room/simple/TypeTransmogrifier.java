@@ -12,7 +12,7 @@
  https://commonsware.com/AndroidArch
  */
 
-package com.commonsware.cwac.saferoom.test.room;
+package com.commonsware.cwac.saferoom.test.room.simple;
 
 import android.arch.persistence.room.TypeConverter;
 import android.location.Location;

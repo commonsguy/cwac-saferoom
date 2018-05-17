@@ -12,14 +12,14 @@
  https://commonsware.com/AndroidArch
  */
 
-package com.commonsware.cwac.saferoom.test.room;
+package com.commonsware.cwac.saferoom.test.room.simple;
 
-public class LocationColumns {
-  public final double latitude;
-  public final double longitude;
+public class CustomerStats {
+  public final int count;
+  public final String max;
 
-  public LocationColumns(double latitude, double longitude) {
-    this.latitude=latitude;
-    this.longitude=longitude;
+  public CustomerStats(int count, String max) {
+    this.count=count;
+    this.max=max;
   }
 }

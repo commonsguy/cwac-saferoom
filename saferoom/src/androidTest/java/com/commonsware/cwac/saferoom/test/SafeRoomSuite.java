@@ -1,6 +1,6 @@
 package com.commonsware.cwac.saferoom.test;
 
-import com.commonsware.cwac.saferoom.test.room.DaoTests;
+import com.commonsware.cwac.saferoom.test.room.simple.DaoTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

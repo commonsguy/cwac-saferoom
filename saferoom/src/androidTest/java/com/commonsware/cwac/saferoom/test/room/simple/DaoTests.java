@@ -12,7 +12,7 @@
  https://commonsware.com/AndroidArch
  */
 
-package com.commonsware.cwac.saferoom.test.room;
+package com.commonsware.cwac.saferoom.test.room.simple;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;

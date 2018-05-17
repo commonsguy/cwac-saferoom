@@ -12,14 +12,32 @@
  https://commonsware.com/AndroidArch
  */
 
-package com.commonsware.cwac.saferoom.test.room;
+package com.commonsware.cwac.saferoom.test.room.simple;
 
-public class CustomerDisplayTuple {
-  public final String id;
-  public final String displayName;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.support.annotation.NonNull;
+import java.util.UUID;
 
-  public CustomerDisplayTuple(String id, String displayName) {
+@Entity(tableName="thingy", primaryKeys={"id", "version_code"})
+class VersionedThingy {
+  @NonNull public final String id;
+
+  @ColumnInfo(name="version_code")
+  @NonNull
+  public final int versionCode;
+
+  @Ignore
+  private String something;
+
+  @Ignore
+  VersionedThingy() {
+    this(UUID.randomUUID().toString(), 1);
+  }
+
+  VersionedThingy(String id, int versionCode) {
     this.id=id;
-    this.displayName=displayName;
+    this.versionCode=versionCode;
   }
 }
