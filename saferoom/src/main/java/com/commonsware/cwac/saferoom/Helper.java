@@ -156,15 +156,20 @@ class Helper implements SupportSQLiteOpenHelper {
 
     SupportSQLiteDatabase getWritableSupportDatabase(char[] passphrase) {
       SQLiteDatabase db=super.getWritableDatabase(passphrase);
+      SupportSQLiteDatabase result=getWrappedDb(db);
 
-      return(getWrappedDb(db));
+      if (walEnabled!=null) {
+        setupWAL(wrappedDb);
+      }
+
+      return result;
     }
 
     Database getWrappedDb(SQLiteDatabase db) {
       if (wrappedDb==null) {
         wrappedDb=new Database(db);
 
-        if (walEnabled!=null) {
+        if (walEnabled!=null && !db.inTransaction()) {
           setupWAL(wrappedDb);
         }
       }
@@ -180,6 +185,8 @@ class Helper implements SupportSQLiteOpenHelper {
         else {
           db.disableWriteAheadLogging();
         }
+
+        walEnabled=null;
       }
     }
 

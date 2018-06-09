@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
   RekeyTest.class,
   DecryptTest.class,
   WALTest.class,
-  DaoTests.class
+  DaoTests.class,
+  MigratingImportTest.class
 })
 public class SafeRoomSuite {
 }

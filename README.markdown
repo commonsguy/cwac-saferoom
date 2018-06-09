@@ -14,7 +14,7 @@ applications just yet.
 This Android library project is 
 [available as a JAR](https://github.com/commonsguy/cwac-saferoom/releases)
 or as an artifact for use with Gradle. To use the artifact, add the following
-blocks to your `build.gradle` file:
+blocks to your module's `build.gradle` file:
 
 ```groovy
 repositories {
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.4.1"
+    implementation "com.commonsware.cwac:saferoom:0.4.2"
 }
 ```
 
@@ -214,6 +214,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.4.2: fixed [edge case WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/23)
 - v0.4.1: added Room-specific tests, fixed [WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/17)
 - v0.4.0: updated to `1.1.0` of the support database API
 - v0.3.4: changed non-WAL journal mode to TRUNCATE
