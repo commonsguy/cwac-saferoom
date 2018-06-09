@@ -34,12 +34,12 @@ public class MigratingImportTest {
     final Context ctxt=InstrumentationRegistry.getTargetContext();
 
     SQLiteDatabase.loadLibs(ctxt);
-    SQLiteOpenHelper helper = new NonRoomHelper(ctxt);
+    SQLiteOpenHelper helper = new SafeNonRoomHelper(ctxt);
 
     helper.getWritableDatabase(PASSPHRASE);
     helper.close();
 
-    ImportingDatabase room = ImportingDatabase.gimme(ctxt);
+    ImportingSafeDatabase room = ImportingSafeDatabase.gimme(ctxt);
     SupportSQLiteDatabase db=room.getOpenHelper().getWritableDatabase();
 
     try {
@@ -50,8 +50,28 @@ public class MigratingImportTest {
     }
   }
 
-  private static class NonRoomHelper extends SQLiteOpenHelper {
-    NonRoomHelper(@NonNull Context context) {
+  @Test
+  public void notQuiteAsSafeButStillNice() {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    android.database.sqlite.SQLiteOpenHelper helper = new LessSafeNonRoomHelper(ctxt);
+
+    helper.getWritableDatabase();
+    helper.close();
+
+    ImportingLessSafeDatabase room = ImportingLessSafeDatabase.gimme(ctxt);
+    SupportSQLiteDatabase db=room.getOpenHelper().getWritableDatabase();
+
+    try {
+      assertTrue(db.isWriteAheadLoggingEnabled());
+    }
+    finally {
+      room.close();
+    }
+  }
+
+  private static class SafeNonRoomHelper extends SQLiteOpenHelper {
+    SafeNonRoomHelper(@NonNull Context context) {
       super(context, DB_NAME, null, 1);
     }
 
@@ -66,6 +86,22 @@ public class MigratingImportTest {
     }
   }
 
+  private static class LessSafeNonRoomHelper extends android.database.sqlite.SQLiteOpenHelper {
+    LessSafeNonRoomHelper(@NonNull Context context) {
+      super(context, DB_NAME, null, 1);
+    }
+
+    @Override
+    public void onCreate(android.database.sqlite.SQLiteDatabase db) {
+      // should not need any tables to reproduce the problem
+    }
+
+    @Override
+    public void onUpgrade(android.database.sqlite.SQLiteDatabase db, int oldVersion, int newVersion) {
+      throw new IllegalStateException("Wait, wut?");
+    }
+  }
+
   @Entity
   static class SillyEntity {
     @PrimaryKey(autoGenerate = true)
@@ -73,10 +109,19 @@ public class MigratingImportTest {
   }
 
   @Database(entities = {SillyEntity.class}, version = 2)
-  static abstract class ImportingDatabase extends RoomDatabase {
-    static ImportingDatabase gimme(Context ctxt) {
-      return Room.databaseBuilder(ctxt, ImportingDatabase.class, DB_NAME)
+  static abstract class ImportingSafeDatabase extends RoomDatabase {
+    static ImportingSafeDatabase gimme(Context ctxt) {
+      return Room.databaseBuilder(ctxt, ImportingSafeDatabase.class, DB_NAME)
         .openHelperFactory(new SafeHelperFactory(PASSPHRASE.toCharArray()))
+        .addMigrations(MIGRATION_1_2)
+        .build();
+    }
+  }
+
+  @Database(entities = {SillyEntity.class}, version = 2)
+  static abstract class ImportingLessSafeDatabase extends RoomDatabase {
+    static ImportingLessSafeDatabase gimme(Context ctxt) {
+      return Room.databaseBuilder(ctxt, ImportingLessSafeDatabase.class, DB_NAME)
         .addMigrations(MIGRATION_1_2)
         .build();
     }
