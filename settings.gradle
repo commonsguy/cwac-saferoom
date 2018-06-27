@@ -1,1 +1,1 @@
-include ':saferoom', ':integration-tests:testapp', ':kotlintestapp'
+include ':saferoom'
