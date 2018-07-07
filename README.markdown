@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.4.2"
+    implementation "com.commonsware.cwac:saferoom:0.4.3"
 }
 ```
 
@@ -141,8 +141,8 @@ does not depend upon Room itself, as not all clients of the support database
 API will be using Room. You need to add your own dependencies upon Room
 or other database APIs if you want to use them.
 
-Presently, CWAC-SafeRoom works with `1.1.0` of the support database API
-from the Architecture Components.
+Presently, CWAC-SafeRoom works with `1.1.1` of the support database API
+from the Architecture Components (`android.arch.persistence:db`).
 
 ## Tests
 
@@ -157,7 +157,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.4.1 of this module, meaning that it is slowly gaining steam.
+This is version v0.4.3 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -214,6 +214,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.4.3: bumped `android.arch.persistence:db` dependency to `1.1.1`
 - v0.4.2: fixed [edge case WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/23)
 - v0.4.1: added Room-specific tests, fixed [WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/17)
 - v0.4.0: updated to `1.1.0` of the support database API
