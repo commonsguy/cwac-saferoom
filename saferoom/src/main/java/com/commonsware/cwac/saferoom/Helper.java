@@ -147,7 +147,7 @@ class Helper implements SupportSQLiteOpenHelper {
   }
 
   abstract static class OpenHelper extends SQLiteOpenHelper {
-    private Database wrappedDb;
+    private volatile Database wrappedDb;
     private Boolean walEnabled;
 
     OpenHelper(Context context, String name, int version) {
@@ -167,10 +167,14 @@ class Helper implements SupportSQLiteOpenHelper {
 
     Database getWrappedDb(SQLiteDatabase db) {
       if (wrappedDb==null) {
-        wrappedDb=new Database(db);
+        synchronized (this) {
+          if (wrappedDb==null) {
+            wrappedDb = new Database(db);
 
-        if (walEnabled!=null && !db.inTransaction()) {
-          setupWAL(wrappedDb);
+            if (walEnabled != null && !db.inTransaction()) {
+              setupWAL(wrappedDb);
+            }
+          }
         }
       }
 
