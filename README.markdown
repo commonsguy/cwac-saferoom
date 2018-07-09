@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.4.3"
+    implementation "com.commonsware.cwac:saferoom:0.4.4"
 }
 ```
 
@@ -157,7 +157,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.4.3 of this module, meaning that it is slowly gaining steam.
+This is version v0.4.4 of this module, meaning that it is slowly gaining steam.
 
 (note: no actual steam is used in this library)
 
@@ -214,6 +214,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.4.4: addressed thread-safety issue (#27)
 - v0.4.3: bumped `android.arch.persistence:db` dependency to `1.1.1`
 - v0.4.2: fixed [edge case WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/23)
 - v0.4.1: added Room-specific tests, fixed [WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/17)
