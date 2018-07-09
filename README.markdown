@@ -214,7 +214,7 @@ of guidance here.
 
 ## Release Notes
 
-- v0.4.4: addressed thread-safety issue (#27)
+- v0.4.4: addressed [thread-safety issue](https://github.com/commonsguy/cwac-saferoom/issues/27)
 - v0.4.3: bumped `android.arch.persistence:db` dependency to `1.1.1`
 - v0.4.2: fixed [edge case WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/23)
 - v0.4.1: added Room-specific tests, fixed [WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/17)
