@@ -14,15 +14,15 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+import androidx.annotation.NonNull;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 @Entity(indices={@Index(value="postalCode", unique=true)})
 class Customer {

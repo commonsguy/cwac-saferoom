@@ -14,8 +14,8 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
-import android.arch.persistence.room.Relation;
 import java.util.List;
+import androidx.room.Relation;
 
 public class CategoryTuple {
   public final String id;

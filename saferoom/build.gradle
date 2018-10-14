@@ -1,12 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         testApplicationId "com.commonsware.cwac.saferoom.test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -22,15 +21,15 @@ android {
     }
 }
 
-def roomVer="1.1.1"
+def roomVer="2.0.0"
 
 dependencies {
     api "net.zetetic:android-database-sqlcipher:3.5.9@aar"
-    api "android.arch.persistence:db:$roomVer"
-    androidTestAnnotationProcessor "android.arch.persistence.room:compiler:$roomVer"
+    api "androidx.sqlite:sqlite-framework:$roomVer"
+    androidTestAnnotationProcessor "androidx.room:room-compiler:$roomVer"
     androidTestImplementation "com.android.support.test:rules:1.0.2"
-    androidTestImplementation "com.commonsware.misc:support-db-tests:0.2.0"
-    androidTestImplementation "android.arch.persistence.room:runtime:$roomVer"
+    androidTestImplementation "com.commonsware.misc:support.db.tests.x:0.3.0"
+    androidTestImplementation "androidx.room:room-runtime:$roomVer"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {

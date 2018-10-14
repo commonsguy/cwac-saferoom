@@ -1,12 +1,5 @@
 package com.commonsware.cwac.saferoom.test;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
@@ -17,6 +10,13 @@ import net.sqlcipher.database.SQLiteOpenHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import androidx.room.Database;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)

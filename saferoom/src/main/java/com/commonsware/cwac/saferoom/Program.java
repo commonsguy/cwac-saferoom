@@ -14,8 +14,8 @@
 
 package com.commonsware.cwac.saferoom;
 
-import android.arch.persistence.db.SupportSQLiteProgram;
 import net.sqlcipher.database.SQLiteProgram;
+import androidx.sqlite.db.SupportSQLiteProgram;
 
 /**
  * SupportSQLiteProgram implementation that wraps SQLCipher for Android's

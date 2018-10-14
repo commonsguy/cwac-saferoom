@@ -14,10 +14,6 @@
 
 package com.commonsware.cwac.saferoom;
 
-import android.arch.persistence.db.SimpleSQLiteQuery;
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.db.SupportSQLiteQuery;
-import android.arch.persistence.db.SupportSQLiteStatement;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -30,6 +26,10 @@ import net.sqlcipher.database.SQLiteCursorDriver;
 import net.sqlcipher.database.SQLiteQuery;
 import java.util.List;
 import java.util.Locale;
+import androidx.sqlite.db.SimpleSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.sqlite.db.SupportSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteStatement;
 
 /**
  * A SupportSQLiteDatabase implementation that delegates to a SQLCipher

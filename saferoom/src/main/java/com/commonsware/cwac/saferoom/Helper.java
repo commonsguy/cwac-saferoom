@@ -17,14 +17,13 @@
 
 package com.commonsware.cwac.saferoom;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.db.SupportSQLiteOpenHelper;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
-import java.io.IOException;
+import androidx.annotation.RequiresApi;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 /**
  * SupportSQLiteOpenHelper implementation that works with SQLCipher for Android

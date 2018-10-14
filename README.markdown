@@ -11,10 +11,27 @@ this project is for experimentation purposes and for helping to prove the
 practicality of the `Support...` class setup. Do not use this in production
 applications just yet.
 
-This Android library project is 
-[available as a JAR](https://github.com/commonsguy/cwac-saferoom/releases)
-or as an artifact for use with Gradle. To use the artifact, add the following
-blocks to your module's `build.gradle` file:
+## Installation
+
+There are two versions of this library, for AndroidX and for the older Android Support Library.
+
+If you cannot use SSL, use `http://repo.commonsware.com` for the repository URL.
+
+### AndroidX
+
+```groovy
+repositories {
+    maven {
+        url "https://s3.amazonaws.com/repo.commonsware.com"
+    }
+}
+
+dependencies {
+    implementation "com.commonsware.cwac:saferoom.x:0.5.0"
+}
+```
+
+### Android Support Library
 
 ```groovy
 repositories {
@@ -27,9 +44,6 @@ dependencies {
     implementation "com.commonsware.cwac:saferoom:0.4.4"
 }
 ```
-
-Or, if you cannot use SSL, use `http://repo.commonsware.com` for the repository
-URL.
 
 ## Usage
 
@@ -135,14 +149,15 @@ be opened using ordinary SQLite.
 
 As one might expect, this project depends on SQLCipher for Android.
 
-This project also depends upon `android.arch.persistence:db`, which is
-the support database API that Room uses. This project, as of 0.1.0,
-does not depend upon Room itself, as not all clients of the support database
-API will be using Room. You need to add your own dependencies upon Room
-or other database APIs if you want to use them.
+This project also depends upon `android.arch.persistence:db` (Android Support Library edition)
+or `androidx.sqlite:sqlite-framework` (AndroidX edition), which is
+the support database API that Room uses.
 
-Presently, CWAC-SafeRoom works with `1.1.1` of the support database API
-from the Architecture Components (`android.arch.persistence:db`).
+The Android Support Library edition of CWAC-SafeRoom is frozen at supporting `1.1.1`
+of `android.arch.persistence:db`.
+
+The AndroidX edition of CWAC-SafeRoom supports `2.0.0` of `androidx.sqlite:sqlite-framework`
+and should be updated to support newer versions of AndroidX over time.
 
 ## Tests
 
@@ -157,9 +172,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.4.4 of this module, meaning that it is slowly gaining steam.
-
-(note: no actual steam is used in this library)
+This is version v0.5.0 of this module
 
 ## Demo
 
@@ -214,6 +227,7 @@ of guidance here.
 
 ## Release Notes
 
+- v0.5.0: released AndroidX edition
 - v0.4.4: addressed [thread-safety issue](https://github.com/commonsguy/cwac-saferoom/issues/27)
 - v0.4.3: bumped `android.arch.persistence:db` dependency to `1.1.1`
 - v0.4.2: fixed [edge case WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/23)

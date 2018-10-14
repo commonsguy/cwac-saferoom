@@ -14,7 +14,6 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
-import android.arch.persistence.room.TypeConverter;
 import android.location.Location;
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -26,6 +25,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import androidx.room.TypeConverter;
 
 public class TypeTransmogrifier {
   private static final String TAG="TypeTransmogrifier";

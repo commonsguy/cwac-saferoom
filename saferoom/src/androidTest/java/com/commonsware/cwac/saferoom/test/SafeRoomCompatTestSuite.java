@@ -16,13 +16,13 @@
 
 package com.commonsware.cwac.saferoom.test;
 
-import android.arch.persistence.db.SupportSQLiteOpenHelper;
 import android.content.Context;
 import android.text.SpannableStringBuilder;
 import com.commonsware.cwac.saferoom.SafeHelperFactory;
 import com.commonsware.dbtest.CompatTestSuite;
 import org.junit.BeforeClass;
 import java.io.File;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 public class SafeRoomCompatTestSuite extends CompatTestSuite {
   @BeforeClass

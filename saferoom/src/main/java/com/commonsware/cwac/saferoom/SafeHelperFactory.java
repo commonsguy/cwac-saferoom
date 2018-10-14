@@ -14,10 +14,10 @@
 
 package com.commonsware.cwac.saferoom;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.db.SupportSQLiteOpenHelper;
 import android.content.Context;
 import android.text.Editable;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 /**
  * SupportSQLiteOpenHelper.Factory implementation, for use with Room
