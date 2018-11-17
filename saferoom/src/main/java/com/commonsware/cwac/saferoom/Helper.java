@@ -147,13 +147,13 @@ class Helper implements SupportSQLiteOpenHelper {
 
   abstract static class OpenHelper extends SQLiteOpenHelper {
     private volatile Database wrappedDb;
-    private Boolean walEnabled;
+    private volatile Boolean walEnabled;
 
     OpenHelper(Context context, String name, int version) {
       super(context, name, null, version, null);
     }
 
-    SupportSQLiteDatabase getWritableSupportDatabase(char[] passphrase) {
+    synchronized SupportSQLiteDatabase getWritableSupportDatabase(char[] passphrase) {
       SQLiteDatabase db=super.getWritableDatabase(passphrase);
       SupportSQLiteDatabase result=getWrappedDb(db);
 
@@ -164,16 +164,12 @@ class Helper implements SupportSQLiteOpenHelper {
       return result;
     }
 
-    Database getWrappedDb(SQLiteDatabase db) {
-      if (wrappedDb==null) {
-        synchronized (this) {
-          if (wrappedDb==null) {
-            wrappedDb = new Database(db);
+    synchronized Database getWrappedDb(SQLiteDatabase db) {
+      if (wrappedDb == null) {
+        wrappedDb = new Database(db);
 
-            if (walEnabled != null && !db.inTransaction()) {
-              setupWAL(wrappedDb);
-            }
-          }
+        if (walEnabled != null && !db.inTransaction()) {
+          setupWAL(wrappedDb);
         }
       }
 
