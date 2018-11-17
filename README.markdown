@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:0.5.0"
+    implementation "com.commonsware.cwac:saferoom.x:0.5.1"
 }
 ```
 
@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.4.4"
+    implementation "com.commonsware.cwac:saferoom:0.4.5"
 }
 ```
 
@@ -172,7 +172,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.5.0 of this module
+This is version v0.5.1 of this module
 
 ## Demo
 
@@ -227,7 +227,14 @@ of guidance here.
 
 ## Release Notes
 
+### Android X
+
+- v0.5.1: added more synchronization
 - v0.5.0: released AndroidX edition
+
+### Android Support Library
+
+- v0.4.5: added more synchronization
 - v0.4.4: addressed [thread-safety issue](https://github.com/commonsguy/cwac-saferoom/issues/27)
 - v0.4.3: bumped `android.arch.persistence:db` dependency to `1.1.1`
 - v0.4.2: fixed [edge case WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/23)
