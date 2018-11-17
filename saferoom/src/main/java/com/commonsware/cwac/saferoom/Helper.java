@@ -89,7 +89,7 @@ class Helper implements SupportSQLiteOpenHelper {
    * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
-  public String getDatabaseName() {
+  synchronized public String getDatabaseName() {
     return name;
     // TODO not supported in SQLCipher for Android
 //    throw new UnsupportedOperationException("I kinna do it, cap'n!");
@@ -103,7 +103,7 @@ class Helper implements SupportSQLiteOpenHelper {
    */
   @Override
   @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-  public void setWriteAheadLoggingEnabled(boolean enabled) {
+  synchronized public void setWriteAheadLoggingEnabled(boolean enabled) {
     // throw new UnsupportedOperationException("I kinna do it, cap'n!");
     delegate.setWriteAheadLoggingEnabled(enabled);
   }
@@ -115,7 +115,7 @@ class Helper implements SupportSQLiteOpenHelper {
    * database
    */
   @Override
-  public SupportSQLiteDatabase getWritableDatabase() {
+  synchronized public SupportSQLiteDatabase getWritableDatabase() {
     SupportSQLiteDatabase result=
       delegate.getWritableSupportDatabase(passphrase);
 
@@ -142,19 +142,19 @@ class Helper implements SupportSQLiteOpenHelper {
    * {@inheritDoc}
    */
   @Override
-  public void close() {
+  synchronized public void close() {
     delegate.close();
   }
 
   abstract static class OpenHelper extends SQLiteOpenHelper {
     private volatile Database wrappedDb;
-    private Boolean walEnabled;
+    private volatile Boolean walEnabled;
 
     OpenHelper(Context context, String name, int version) {
       super(context, name, null, version, null);
     }
 
-    SupportSQLiteDatabase getWritableSupportDatabase(char[] passphrase) {
+    synchronized SupportSQLiteDatabase getWritableSupportDatabase(char[] passphrase) {
       SQLiteDatabase db=super.getWritableDatabase(passphrase);
       SupportSQLiteDatabase result=getWrappedDb(db);
 
@@ -165,16 +165,12 @@ class Helper implements SupportSQLiteOpenHelper {
       return result;
     }
 
-    Database getWrappedDb(SQLiteDatabase db) {
+    synchronized Database getWrappedDb(SQLiteDatabase db) {
       if (wrappedDb==null) {
-        synchronized (this) {
-          if (wrappedDb==null) {
-            wrappedDb = new Database(db);
+        wrappedDb = new Database(db);
 
-            if (walEnabled != null && !db.inTransaction()) {
-              setupWAL(wrappedDb);
-            }
-          }
+        if (walEnabled != null && !db.inTransaction()) {
+          setupWAL(wrappedDb);
         }
       }
 
