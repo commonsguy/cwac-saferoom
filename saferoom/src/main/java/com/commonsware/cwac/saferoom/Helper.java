@@ -88,7 +88,7 @@ class Helper implements SupportSQLiteOpenHelper {
    * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
-  public String getDatabaseName() {
+  synchronized public String getDatabaseName() {
     return name;
     // TODO not supported in SQLCipher for Android
 //    throw new UnsupportedOperationException("I kinna do it, cap'n!");
@@ -102,7 +102,7 @@ class Helper implements SupportSQLiteOpenHelper {
    */
   @Override
   @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-  public void setWriteAheadLoggingEnabled(boolean enabled) {
+  synchronized public void setWriteAheadLoggingEnabled(boolean enabled) {
     // throw new UnsupportedOperationException("I kinna do it, cap'n!");
     delegate.setWriteAheadLoggingEnabled(enabled);
   }
@@ -114,7 +114,7 @@ class Helper implements SupportSQLiteOpenHelper {
    * database
    */
   @Override
-  public SupportSQLiteDatabase getWritableDatabase() {
+  synchronized public SupportSQLiteDatabase getWritableDatabase() {
     SupportSQLiteDatabase result=
       delegate.getWritableSupportDatabase(passphrase);
 
@@ -141,7 +141,7 @@ class Helper implements SupportSQLiteOpenHelper {
    * {@inheritDoc}
    */
   @Override
-  public void close() {
+  synchronized public void close() {
     delegate.close();
   }
 
