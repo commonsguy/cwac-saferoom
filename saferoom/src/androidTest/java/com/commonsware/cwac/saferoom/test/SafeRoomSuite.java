@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
   SafeRoomCompatTestSuite.class,
   RekeyTest.class,
+  EncryptTest.class,
   DecryptTest.class,
   WALTest.class,
   DaoTests.class,
