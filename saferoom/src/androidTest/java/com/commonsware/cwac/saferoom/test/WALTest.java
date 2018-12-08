@@ -36,7 +36,7 @@ public class WALTest {
     SafeHelperFactory factory=
       SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
     SupportSQLiteOpenHelper helper=
-      factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME, 1,
+      factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME,
         new Callback(1));
     SupportSQLiteDatabase db=helper.getWritableDatabase();
 
@@ -49,7 +49,7 @@ public class WALTest {
 
     factory=SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
     helper=
-      factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME, 1,
+      factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME,
         new Callback(1));
     db=helper.getWritableDatabase();
 

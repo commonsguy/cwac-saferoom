@@ -63,37 +63,58 @@ class Database implements SupportSQLiteDatabase {
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
   public void beginTransactionNonExclusive() {
-    // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
+    safeDb.beginTransactionNonExclusive();
   }
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
-  public void beginTransactionWithListener(
-    SQLiteTransactionListener transactionListener) {
-    // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
+  public void beginTransactionWithListener(SQLiteTransactionListener listener) {
+    safeDb.beginTransactionWithListener(
+      new net.sqlcipher.database.SQLiteTransactionListener() {
+        @Override
+        public void onBegin() {
+          listener.onBegin();
+        }
+
+        @Override
+        public void onCommit() {
+          listener.onCommit();
+        }
+
+        @Override
+        public void onRollback() {
+          listener.onRollback();
+        }
+      });
   }
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
-  public void beginTransactionWithListenerNonExclusive(
-    SQLiteTransactionListener transactionListener) {
-    // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
+  public void beginTransactionWithListenerNonExclusive(SQLiteTransactionListener listener) {
+    safeDb.beginTransactionWithListenerNonExclusive(
+      new net.sqlcipher.database.SQLiteTransactionListener() {
+        @Override
+        public void onBegin() {
+          listener.onBegin();
+        }
+
+        @Override
+        public void onCommit() {
+          listener.onCommit();
+        }
+
+        @Override
+        public void onRollback() {
+          listener.onRollback();
+        }
+      });
   }
 
   /**
@@ -286,13 +307,12 @@ class Database implements SupportSQLiteDatabase {
         throw new RuntimeException("Exception attempting to close statement", e);
       }
     }
-
-//    return(safeDb.delete(table, whereClause, stringify(whereArgs)));
   }
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("ThrowFromFinallyBlock")
   @Override
   public int update(String table, int conflictAlgorithm, ContentValues values,
                     String whereClause, Object[] whereArgs) {
@@ -374,6 +394,10 @@ class Database implements SupportSQLiteDatabase {
     return(safeDb.isOpen());
   }
 
+  /**
+   * {@inheritDoc}
+   */
+
   @Override
   public boolean needUpgrade(int newVersion) {
     return(safeDb.needUpgrade(newVersion));
@@ -405,14 +429,10 @@ class Database implements SupportSQLiteDatabase {
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
   public void setForeignKeyConstraintsEnabled(boolean enable) {
-    // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
-//    safeDb.setForeignKeyConstraintsEnabled(enable);
+    safeDb.setForeignKeyConstraintsEnabled(enable);
   }
 
   /**
@@ -420,7 +440,7 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public boolean enableWriteAheadLogging() {
-    return simpleQueryForString("PRAGMA journal_mode=WAL;").equalsIgnoreCase("wal");
+    return safeDb.enableWriteAheadLogging();
   }
 
   /**
@@ -428,41 +448,31 @@ class Database implements SupportSQLiteDatabase {
    */
   @Override
   public void disableWriteAheadLogging() {
-    safeDb.rawExecSQL("PRAGMA journal_mode=TRUNCATE;");
+    safeDb.disableWriteAheadLogging();
   }
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
   public boolean isWriteAheadLoggingEnabled() {
-    return simpleQueryForString("PRAGMA journal_mode;").equalsIgnoreCase("wal");
+    return safeDb.isWriteAheadLoggingEnabled();
   }
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
   public List<Pair<String, String>> getAttachedDbs() {
-    // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
-//    return(safeDb.getAttachedDbs());
+    return(safeDb.getAttachedDbs());
   }
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
   public boolean isDatabaseIntegrityOk() {
-    // TODO not supported in SQLCipher for Android
-    throw new UnsupportedOperationException("I kinna do it, cap'n!");
-//    return(safeDb.isDatabaseIntegrityOk());
+    return(safeDb.isDatabaseIntegrityOk());
   }
 
   /**
@@ -505,25 +515,5 @@ class Database implements SupportSQLiteDatabase {
 
   private static boolean isEmpty(String input) {
     return input == null || input.length() == 0;
-  }
-
-  private String simpleQueryForString(String query) {
-    SupportSQLiteStatement statement=null;
-
-    try {
-      statement=compileStatement(query);
-
-      return statement.simpleQueryForString();
-    }
-    finally {
-      if (statement!=null) {
-        try {
-          statement.close();
-        }
-        catch (Exception e) {
-          throw new RuntimeException("Exception attempting to close statement", e);
-        }
-      }
-    }
   }
 }
