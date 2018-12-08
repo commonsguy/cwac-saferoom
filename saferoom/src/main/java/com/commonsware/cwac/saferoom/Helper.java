@@ -24,6 +24,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import net.sqlcipher.DatabaseErrorHandler;
 import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabaseHook;
 import net.sqlcipher.database.SQLiteOpenHelper;
 
 /**
@@ -33,17 +34,18 @@ class Helper implements SupportSQLiteOpenHelper {
   private final OpenHelper delegate;
   private final char[] passphrase;
 
-  Helper(Context context, String name, Callback callback, char[] passphrase) {
+  Helper(Context context, String name, Callback callback, char[] passphrase,
+         String postKeySql) {
     SQLiteDatabase.loadLibs(context);
-    delegate=createDelegate(context, name, callback);
+    delegate=createDelegate(context, name, callback, postKeySql);
     this.passphrase=passphrase;
   }
 
   private OpenHelper createDelegate(Context context, String name,
-                                    final Callback callback) {
+                                    final Callback callback, String postKeySql) {
     final Database[] dbRef = new Database[1];
 
-    return(new OpenHelper(context, name, dbRef, callback));
+    return(new OpenHelper(context, name, dbRef, callback, postKeySql));
   }
 
   /**
@@ -105,8 +107,21 @@ class Helper implements SupportSQLiteOpenHelper {
     private volatile Callback callback;
     private volatile boolean migrated;
 
-    OpenHelper(Context context, String name, Database[] dbRef, Callback callback) {
-      super(context, name, null, callback.version, null, new DatabaseErrorHandler() {
+    OpenHelper(Context context, String name, Database[] dbRef, Callback callback,
+               String postKeySql) {
+      super(context, name, null, callback.version, new SQLiteDatabaseHook() {
+        @Override
+        public void preKey(SQLiteDatabase database) {
+          // no-op
+        }
+
+        @Override
+        public void postKey(SQLiteDatabase database) {
+          if (postKeySql!=null) {
+            database.rawExecSQL(postKeySql);
+          }
+        }
+      }, new DatabaseErrorHandler() {
         @Override
         public void onCorruption(SQLiteDatabase dbObj) {
           Database db = dbRef[0];

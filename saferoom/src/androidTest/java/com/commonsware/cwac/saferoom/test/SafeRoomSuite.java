@@ -12,7 +12,8 @@ import org.junit.runners.Suite;
   DecryptTest.class,
   WALTest.class,
   DaoTests.class,
-  MigratingImportTest.class
+  MigratingImportTest.class,
+  PostHookSqlTest.class
 })
 public class SafeRoomSuite {
 }
