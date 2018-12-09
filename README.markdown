@@ -11,7 +11,7 @@ this project is for experimentation purposes and for helping to prove the
 practicality of the `Support...` class setup. Do not use this in production
 applications just yet.
 
-See [a separate `README`](blob/master/README-1.0.0.md) for information about
+See [a separate `README`](README-1.0.0.md) for information about
 the `1.0.0-alpha1` release.
 
 ## Installation
@@ -177,7 +177,7 @@ to it, etc.
 
 This is version v0.5.1 of this module.
 
-See [a separate `README`](blob/master/README-1.0.0.md) for information about
+See [a separate `README`](README-1.0.0.md) for information about
 the `1.0.0-alpha1` release.
 
 ## Demo
@@ -233,7 +233,7 @@ of guidance here.
 
 ## Release Notes
 
-See [a separate `README`](blob/master/README-1.0.0.md) for information about
+See [a separate `README`](README-1.0.0.md) for information about
 the `1.0.0-alpha1` release.
 
 ### Android X
