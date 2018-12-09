@@ -11,6 +11,9 @@ this project is for experimentation purposes and for helping to prove the
 practicality of the `Support...` class setup. Do not use this in production
 applications just yet.
 
+See [a separate `README`](blob/master/README-1.0.0.md) for information about
+the `1.0.0-alpha1` release.
+
 ## Installation
 
 There are two versions of this library, for AndroidX and for the older Android Support Library.
@@ -172,7 +175,10 @@ to it, etc.
 
 ## Version
 
-This is version v0.5.1 of this module
+This is version v0.5.1 of this module.
+
+See [a separate `README`](blob/master/README-1.0.0.md) for information about
+the `1.0.0-alpha1` release.
 
 ## Demo
 
@@ -226,6 +232,9 @@ Again, the [contribution guidelines](CONTRIBUTING.md) provide a bit
 of guidance here.
 
 ## Release Notes
+
+See [a separate `README`](blob/master/README-1.0.0.md) for information about
+the `1.0.0-alpha1` release.
 
 ### Android X
 
