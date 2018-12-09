@@ -19,7 +19,9 @@ package com.commonsware.cwac.saferoom;
 
 import android.content.Context;
 import android.os.Build;
+import net.sqlcipher.DatabaseErrorHandler;
 import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteDatabaseHook;
 import net.sqlcipher.database.SQLiteOpenHelper;
 import androidx.annotation.RequiresApi;
 import androidx.sqlite.db.SupportSQLiteDatabase;
@@ -31,79 +33,35 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 class Helper implements SupportSQLiteOpenHelper {
   private final OpenHelper delegate;
   private final char[] passphrase;
-  private final String name;
 
-  Helper(Context context, String name, int version,
-         SupportSQLiteOpenHelper.Callback callback, char[] passphrase) {
+  Helper(Context context, String name, Callback callback, char[] passphrase,
+         String postKeySql) {
     SQLiteDatabase.loadLibs(context);
-    delegate=createDelegate(context, name, version, callback);
+    delegate=createDelegate(context, name, callback, postKeySql);
     this.passphrase=passphrase;
-    this.name=name;
   }
 
   private OpenHelper createDelegate(Context context, String name,
-                                    int version, final Callback callback) {
-    return(new OpenHelper(context, name, version) {
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onCreate(SQLiteDatabase db) {
-        callback.onCreate(getWrappedDb(db));
-      }
+                                    final Callback callback, String postKeySql) {
+    final Database[] dbRef = new Database[1];
 
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        callback.onUpgrade(getWrappedDb(db), oldVersion, newVersion);
-      }
-
-/* MLM -- these methods do not exist in SQLCipher for Android
-      @Override
-      public void onConfigure(SQLiteDatabase db) {
-        callback.onConfigure(getWrappedDb(db));
-      }
-
-      @Override
-      public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        callback.onDowngrade(getWrappedDb(db), oldVersion, newVersion);
-      }
-*/
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onOpen(SQLiteDatabase db) {
-        callback.onOpen(getWrappedDb(db));
-      }
-    });
+    return(new OpenHelper(context, name, dbRef, callback, postKeySql));
   }
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
   synchronized public String getDatabaseName() {
-    return name;
-    // TODO not supported in SQLCipher for Android
-//    throw new UnsupportedOperationException("I kinna do it, cap'n!");
-//    return delegate.getDatabaseName();
+    return delegate.getDatabaseName();
   }
 
   /**
    * {@inheritDoc}
-   *
-   * NOTE: Not presently supported, will throw an UnsupportedOperationException
    */
   @Override
   @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
   synchronized public void setWriteAheadLoggingEnabled(boolean enabled) {
-    // throw new UnsupportedOperationException("I kinna do it, cap'n!");
     delegate.setWriteAheadLoggingEnabled(enabled);
   }
 
@@ -133,7 +91,6 @@ class Helper implements SupportSQLiteOpenHelper {
    */
   @Override
   public SupportSQLiteDatabase getReadableDatabase() {
-    //return delegate.getReadableSupportDatabase();
     return(getWritableDatabase());
   }
 
@@ -145,47 +102,106 @@ class Helper implements SupportSQLiteOpenHelper {
     delegate.close();
   }
 
-  abstract static class OpenHelper extends SQLiteOpenHelper {
-    private volatile Database wrappedDb;
-    private volatile Boolean walEnabled;
+  static class OpenHelper extends SQLiteOpenHelper {
+    private final Database[] dbRef;
+    private volatile Callback callback;
+    private volatile boolean migrated;
 
-    OpenHelper(Context context, String name, int version) {
-      super(context, name, null, version, null);
+    OpenHelper(Context context, String name, Database[] dbRef, Callback callback,
+               String postKeySql) {
+      super(context, name, null, callback.version, new SQLiteDatabaseHook() {
+        @Override
+        public void preKey(SQLiteDatabase database) {
+          // no-op
+        }
+
+        @Override
+        public void postKey(SQLiteDatabase database) {
+          if (postKeySql!=null) {
+            database.rawExecSQL(postKeySql);
+          }
+        }
+      }, new DatabaseErrorHandler() {
+        @Override
+        public void onCorruption(SQLiteDatabase dbObj) {
+          Database db = dbRef[0];
+
+          if (db != null) {
+            callback.onCorruption(db);
+          }
+        }
+      });
+
+      this.dbRef = dbRef;
+      this.callback=callback;
     }
 
     synchronized SupportSQLiteDatabase getWritableSupportDatabase(char[] passphrase) {
-      SQLiteDatabase db=super.getWritableDatabase(passphrase);
-      SupportSQLiteDatabase result=getWrappedDb(db);
+      migrated = false;
 
-      if (walEnabled!=null) {
-        setupWAL(wrappedDb);
+      SQLiteDatabase db=super.getWritableDatabase(passphrase);
+
+      if (migrated) {
+        close();
+        return getWritableSupportDatabase(passphrase);
       }
 
-      return result;
+      return getWrappedDb(db);
     }
 
     synchronized Database getWrappedDb(SQLiteDatabase db) {
+      Database wrappedDb = dbRef[0];
+
       if (wrappedDb == null) {
         wrappedDb = new Database(db);
-
-        if (walEnabled != null && !db.inTransaction()) {
-          setupWAL(wrappedDb);
-        }
+        dbRef[0] = wrappedDb;
       }
 
-      return(wrappedDb);
+      return(dbRef[0]);
     }
 
-    private void setupWAL(Database db) {
-      if (!db.isReadOnly()) {
-        if (walEnabled) {
-          db.enableWriteAheadLogging();
-        }
-        else {
-          db.disableWriteAheadLogging();
-        }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+      callback.onCreate(getWrappedDb(sqLiteDatabase));
+    }
 
-        walEnabled=null;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+      migrated = true;
+      callback.onUpgrade(getWrappedDb(sqLiteDatabase), oldVersion, newVersion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+      callback.onConfigure(getWrappedDb(db));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+      migrated = true;
+      callback.onDowngrade(getWrappedDb(db), oldVersion, newVersion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+      if (!migrated) {
+        // from Google: "if we've migrated, we'll re-open the db so we  should not call the callback."
+        callback.onOpen(getWrappedDb(db));
       }
     }
 
@@ -195,16 +211,7 @@ class Helper implements SupportSQLiteOpenHelper {
     @Override
     public synchronized void close() {
       super.close();
-      wrappedDb.close();
-      wrappedDb=null;
-    }
-
-    void setWriteAheadLoggingEnabled(boolean writeAheadLoggingEnabled) {
-      walEnabled=writeAheadLoggingEnabled;
-
-      if (wrappedDb!=null) {
-        setupWAL(wrappedDb);
-      }
+      dbRef[0] = null;
     }
   }
 }

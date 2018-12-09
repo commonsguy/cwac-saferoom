@@ -24,7 +24,12 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
  * and similar libraries, that supports SQLCipher for Android.
  */
 public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
+  public static final String POST_KEY_SQL_MIGRATE = "PRAGMA cipher_migrate;";
+  public static final String POST_KEY_SQL_V3 =
+    "PRAGMA cipher_page_size = 1024; PRAGMA kdf_iter = 64000; PRAGMA cipher_hmac_algorithm = HMAC_SHA1; PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;";
+
   final private char[] passphrase;
+  final private String postKeySql;
 
   /**
    * Creates a SafeHelperFactory from an Editable, such as what you get by
@@ -36,13 +41,28 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
    * @return a SafeHelperFactory
    */
   public static SafeHelperFactory fromUser(Editable editor) {
+    return fromUser(editor, null);
+  }
+
+  /**
+   * Creates a SafeHelperFactory from an Editable, such as what you get by
+   * calling getText() on an EditText.
+   *
+   * The Editable will be cleared as part of this call.
+   *
+   * @param editor the user's supplied passphrase
+   * @param postKeySql optional SQL to be executed after database has been
+   *                    "keyed" but before any other database access is performed
+   * @return a SafeHelperFactory
+   */
+  public static SafeHelperFactory fromUser(Editable editor, String postKeySql) {
     char[] passphrase=new char[editor.length()];
     SafeHelperFactory result;
 
     editor.getChars(0, editor.length(), passphrase, 0);
 
     try {
-      result=new SafeHelperFactory(passphrase);
+      result=new SafeHelperFactory(passphrase, postKeySql);
     }
     finally {
       editor.clear();
@@ -104,7 +124,27 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
    * @param passphrase user-supplied passphrase to use for the database
    */
   public SafeHelperFactory(char[] passphrase) {
+    this(passphrase, null);
+  }
+
+  /**
+   * Standard constructor.
+   *
+   * Note that the passphrase supplied here will be filled in with zeros after
+   * the database is opened. Ideally, you should not create additional copies
+   * of this passphrase, particularly as String objects.
+   *
+   * If you are using an EditText to collect the passphrase from the user,
+   * call getText() on the EditText, and pass that Editable to the
+   * SafeHelperFactory.fromUser() factory method.
+   *
+   * @param passphrase user-supplied passphrase to use for the database
+   * @param postKeySql optional callback to be called after database has been
+   *                    "keyed" but before any database access is performed
+   */
+  public SafeHelperFactory(char[] passphrase, String postKeySql) {
     this.passphrase=passphrase;
+    this.postKeySql=postKeySql;
   }
 
   /**
@@ -114,11 +154,11 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
   public SupportSQLiteOpenHelper create(
     SupportSQLiteOpenHelper.Configuration configuration) {
     return(create(configuration.context, configuration.name,
-      configuration.callback.version, configuration.callback));
+      configuration.callback));
   }
 
-  public SupportSQLiteOpenHelper create(Context context, String name, int version,
+  public SupportSQLiteOpenHelper create(Context context, String name,
                                         SupportSQLiteOpenHelper.Callback callback) {
-    return(new Helper(context, name, version, callback, passphrase));
+    return(new Helper(context, name, callback, passphrase, postKeySql));
   }
 }

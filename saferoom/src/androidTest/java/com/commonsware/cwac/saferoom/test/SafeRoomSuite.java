@@ -8,10 +8,12 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
   SafeRoomCompatTestSuite.class,
   RekeyTest.class,
+  EncryptTest.class,
   DecryptTest.class,
   WALTest.class,
   DaoTests.class,
-  MigratingImportTest.class
+  MigratingImportTest.class,
+  PostHookSqlTest.class
 })
 public class SafeRoomSuite {
 }

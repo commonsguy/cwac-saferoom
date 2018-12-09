@@ -145,24 +145,22 @@ public class SQLCipherUtils {
     SQLiteDatabase.loadLibs(ctxt);
 
     if (originalFile.exists()) {
-      File newFile=
-        File.createTempFile("sqlcipherutils", "tmp",
+      File newFile=File.createTempFile("sqlcipherutils", "tmp",
           ctxt.getCacheDir());
       SQLiteDatabase db=
         SQLiteDatabase.openDatabase(originalFile.getAbsolutePath(),
           "", null, SQLiteDatabase.OPEN_READWRITE);
-
-      db.rawExecSQL("ATTACH DATABASE '"+newFile.getAbsolutePath()+
-        "' AS encrypted KEY '"+String.valueOf(passphrase)+"'");
-      db.rawExecSQL("SELECT sqlcipher_export('encrypted')");
-      db.rawExecSQL("DETACH DATABASE encrypted");
-
       int version=db.getVersion();
 
       db.close();
 
       db=SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), passphrase,
         null, SQLiteDatabase.OPEN_READWRITE);
+
+      db.rawExecSQL("ATTACH DATABASE '"+originalFile.getAbsolutePath()+
+        "' AS plaintext KEY ''");
+      db.rawExecSQL("SELECT sqlcipher_export('main', 'plaintext')");
+      db.rawExecSQL("DETACH DATABASE plaintext");
       db.setVersion(version);
       db.close();
 

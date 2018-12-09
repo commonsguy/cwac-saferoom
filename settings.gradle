@@ -1,1 +1,1 @@
-include ':saferoom'
+include ':saferoom', ':demo'
