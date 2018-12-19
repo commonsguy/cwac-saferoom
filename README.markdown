@@ -178,7 +178,7 @@ to it, etc.
 This is version v0.5.1 of this module.
 
 See [a separate `README`](README-1.0.0.md) for information about
-the `1.0.0-alpha1` release.
+the `1.0.0-alpha2` release.
 
 ## Demo
 
@@ -234,7 +234,7 @@ of guidance here.
 ## Release Notes
 
 See [a separate `README`](README-1.0.0.md) for information about
-the `1.0.0-alpha1` release.
+the `1.0.0-alpha2` release.
 
 ### Android X
 

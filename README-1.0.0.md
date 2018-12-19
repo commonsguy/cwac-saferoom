@@ -1,11 +1,11 @@
-# CWAC-SafeRoom `1.0.0-alpha1`
+# CWAC-SafeRoom `1.0.0-alpha2`
 
 If you have already integrated [CWAC-SafeRoom](https://github.com/commonsguy/cwac-saferoom),
-you may be interested in experimenting with `1.0.0-alpha1`.
+you may be interested in experimenting with `1.0.0-alpha2`.
 
 ## What's Different?
 
-Primarily, `1.0.0-alpha1` uses [SQLCipher for Android 4.0.0](https://www.zetetic.net/blog/2018/11/30/sqlcipher-400-release/),
+Primarily, `1.0.0-alpha2` uses [SQLCipher for Android 4.0.1](https://www.zetetic.net/blog/2018/12/18/sqlcipher-401-release/),
 the latest-and-greatest release of SQLCipher for Android.
 
 Part of what we get from that is an expanded `SQLiteDatabase` API, one that more
@@ -13,8 +13,11 @@ closely resembles the modern framework implementation. That, in turn, allows
 SafeRoom to fully implement the support database API &mdash; previous releases
 had some gaps (ones that Room, fortunately, tended not to use).
 
-Also, there are a few new utility options in `1.0.0-alpha1`, in part to deal with
+Also, there are a few new utility options in `1.0.0-alpha2`, in part to deal with
 changes in SQLCipher for Android.
+
+And, SQLCipher for Android 4.0.1 has mitigations for
+[the Magellan vulnerability](https://commonsware.com/blog/2018/12/15/sqlite-magellan-bug-your-app.html).
 
 ## Installation
 
@@ -32,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.0-alpha1"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.0-alpha2"
 }
 ```
 
@@ -46,7 +49,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.0-alpha1"
+    implementation "com.commonsware.cwac:saferoom:1.0.0-alpha2"
 }
 ```
 
@@ -54,7 +57,7 @@ dependencies {
 
 If you have not done so already, follow the instructions in
 [the main project `README`](https://github.com/commonsguy/cwac-saferoom).
-For new apps starting fresh with `1.0.0-alpha1` and that were not using
+For new apps starting fresh with `1.0.0-alpha2` and that were not using
 SQLCipher for Android 3.5.9 or older, you should be in good shape.
 
 If, however, you have been using SQLCipher for Android 3.5.9, with or without
@@ -74,14 +77,8 @@ SafeHelperFactory factory=
     SafeHelperFactory.POST_KEY_SQL_V3);
 ```
 
-This will open the database using the following `PRAGMA` options:
-
-```sql
-PRAGMA cipher_page_size = 1024;
-PRAGMA kdf_iter = 64000;
-PRAGMA cipher_hmac_algorithm = HMAC_SHA1;
-PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;
-```
+This will open the database using `PRAGMA cipher_compatibility = 3;`, which was introduced
+in SQLCipher for Android 4.0.1.
 
 ### Migrating to the New Format
 
@@ -109,7 +106,7 @@ biometric, etc.).
 
 ## Questions
 
-If you run into problems with `1.0.0-alpha1` that you're pretty sure is a bug,
+If you run into problems with `1.0.0-alpha2` that you're pretty sure is a bug,
 please post an [issue](https://github.com/commonsguy/cwac-saferoom/issues).
 Be certain to include complete steps for reproducing the issue.
 The [contribution guidelines](CONTRIBUTING.md)
