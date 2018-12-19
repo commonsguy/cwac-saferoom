@@ -25,8 +25,7 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
  */
 public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
   public static final String POST_KEY_SQL_MIGRATE = "PRAGMA cipher_migrate;";
-  public static final String POST_KEY_SQL_V3 =
-    "PRAGMA cipher_page_size = 1024; PRAGMA kdf_iter = 64000; PRAGMA cipher_hmac_algorithm = HMAC_SHA1; PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;";
+  public static final String POST_KEY_SQL_V3 = "PRAGMA cipher_compatibility = 3;";
 
   final private char[] passphrase;
   final private String postKeySql;
