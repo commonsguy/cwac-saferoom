@@ -25,7 +25,7 @@ android {
 def roomVer="1.1.1"
 
 dependencies {
-    api "net.zetetic:android-database-sqlcipher:4.0.0@aar"
+    api "net.zetetic:android-database-sqlcipher:4.0.1@aar"
     api "android.arch.persistence:db:$roomVer"
     androidTestAnnotationProcessor "android.arch.persistence.room:compiler:$roomVer"
     androidTestImplementation "com.android.support.test:rules:1.0.2"
