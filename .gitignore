@@ -1,0 +1,8 @@
+local.properties
+*~
+.gradle/
+*.iml
+.idea/
+gradle.properties
+sync_docs
+build/
