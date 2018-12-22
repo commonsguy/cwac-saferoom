@@ -25,10 +25,10 @@ def roomVer="2.0.0"
 
 dependencies {
     api "net.zetetic:android-database-sqlcipher:4.0.1@aar"
-    api "androidx.sqlite:sqlite-framework:$roomVer"
+    api "androidx.sqlite:sqlite:$roomVer"
     androidTestAnnotationProcessor "androidx.room:room-compiler:$roomVer"
     androidTestImplementation "com.android.support.test:rules:1.0.2"
-    androidTestImplementation "com.commonsware.misc:support.db.tests.x:0.4.0"
+    androidTestImplementation "com.commonsware.misc:support.db.tests.x:0.4.1"
     androidTestImplementation "androidx.room:room-runtime:$roomVer"
 }
 
