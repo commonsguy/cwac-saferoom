@@ -14,7 +14,10 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -41,12 +44,33 @@ public class DecryptTest {
   }
 
   @Test
-  public void dekey() throws IOException {
+  public void successfulDekey() throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    dekey((Callable<Void>) () -> {
+      SQLCipherUtils.decrypt(ctxt, ctxt.getDatabasePath(DB_NAME), PASSPHRASE.toCharArray());
+
+      return null;
+    });
+  }
+
+  @Test(expected = FileNotFoundException.class)
+  public void fileNotFound() throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    dekey((Callable<Void>) () -> {
+      SQLCipherUtils.decrypt(ctxt, new File("/oh/you/must/be/kidding"), PASSPHRASE.toCharArray());
+
+      return null;
+    });
+  }
+
+  private void dekey(Callable<?> decrypter) throws Exception {
     SafeHelperFactory factory=
-      SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
+            SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
     SupportSQLiteOpenHelper helper=
-      factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME,
-        new Callback(1));
+            factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME,
+                    new Callback(1));
     SupportSQLiteDatabase db=helper.getWritableDatabase();
 
     assertOriginalContent(db);
@@ -54,11 +78,11 @@ public class DecryptTest {
 
     final Context ctxt=InstrumentationRegistry.getTargetContext();
 
-    SQLCipherUtils.decrypt(ctxt, ctxt.getDatabasePath(DB_NAME), PASSPHRASE.toCharArray());
+    decrypter.call();
 
     SQLiteDatabase plainDb=
-      SQLiteDatabase.openDatabase(ctxt.getDatabasePath(DB_NAME).getAbsolutePath(),
-        null, SQLiteDatabase.OPEN_READWRITE);
+            SQLiteDatabase.openDatabase(ctxt.getDatabasePath(DB_NAME).getAbsolutePath(),
+                    null, SQLiteDatabase.OPEN_READWRITE);
 
     assertOriginalContent(plainDb);
     plainDb.close();
