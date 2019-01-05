@@ -12,7 +12,10 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 import static junit.framework.TestCase.assertEquals;
@@ -41,7 +44,28 @@ public class DecryptTest {
   }
 
   @Test
-  public void dekey() throws IOException {
+  public void successfulDekey() throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    dekey((Callable<Void>) () -> {
+      SQLCipherUtils.decrypt(ctxt, ctxt.getDatabasePath(DB_NAME), PASSPHRASE.toCharArray());
+
+      return null;
+    });
+  }
+
+  @Test(expected = FileNotFoundException.class)
+  public void fileNotFound() throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    dekey((Callable<Void>) () -> {
+      SQLCipherUtils.decrypt(ctxt, new File("/oh/you/must/be/kidding"), PASSPHRASE.toCharArray());
+
+      return null;
+    });
+  }
+
+  private void dekey(Callable<?> decrypter) throws Exception {
     SafeHelperFactory factory=
       SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
     SupportSQLiteOpenHelper helper=
@@ -54,7 +78,7 @@ public class DecryptTest {
 
     final Context ctxt=InstrumentationRegistry.getTargetContext();
 
-    SQLCipherUtils.decrypt(ctxt, ctxt.getDatabasePath(DB_NAME), PASSPHRASE.toCharArray());
+    decrypter.call();
 
     SQLiteDatabase plainDb=
       SQLiteDatabase.openDatabase(ctxt.getDatabasePath(DB_NAME).getAbsolutePath(),

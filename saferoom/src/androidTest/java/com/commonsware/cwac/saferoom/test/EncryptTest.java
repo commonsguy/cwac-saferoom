@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
@@ -14,7 +15,10 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -41,8 +45,42 @@ public class EncryptTest {
   }
 
   @Test
-  public void enkey() throws IOException {
+  public void charEnkey() throws Exception {
     final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    enkey((Callable<Void>) () -> {
+      SQLCipherUtils.encrypt(ctxt, ctxt.getDatabasePath(DB_NAME), PASSPHRASE.toCharArray());
+
+      return null;
+    });
+  }
+
+  @Test
+  public void editableEnkey() throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    enkey((Callable<Void>) () -> {
+      SQLCipherUtils.encrypt(ctxt, DB_NAME, new SpannableStringBuilder(PASSPHRASE));
+
+      return null;
+    });
+  }
+
+  @Test(expected = FileNotFoundException.class)
+  public void fileNotFound() throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    enkey((Callable<Void>) () -> {
+      SQLCipherUtils.encrypt(ctxt, "/this/does/not/exist", PASSPHRASE.toCharArray());
+
+      return null;
+    });
+  }
+
+  private void enkey(Callable<?> encrypter) throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    assertEquals(SQLCipherUtils.State.DOES_NOT_EXIST, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
 
     SQLiteDatabase plainDb=
       SQLiteDatabase.openOrCreateDatabase(ctxt.getDatabasePath(DB_NAME).getAbsolutePath(),
@@ -55,7 +93,11 @@ public class EncryptTest {
     assertOriginalContent(plainDb);
     plainDb.close();
 
-    SQLCipherUtils.encrypt(ctxt, ctxt.getDatabasePath(DB_NAME), PASSPHRASE.toCharArray());
+    assertEquals(SQLCipherUtils.State.UNENCRYPTED, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
+
+    encrypter.call();
+
+    assertEquals(SQLCipherUtils.State.ENCRYPTED, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
 
     SafeHelperFactory factory=
       SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
