@@ -1,11 +1,11 @@
-# CWAC-SafeRoom `1.0.0-alpha3`
+# CWAC-SafeRoom `1.0.0-beta1`
 
 If you have already integrated [CWAC-SafeRoom](https://github.com/commonsguy/cwac-saferoom),
-you may be interested in experimenting with `1.0.0-alpha3`.
+you may be interested in experimenting with `1.0.0-beta1`.
 
 ## What's Different?
 
-Primarily, `1.0.0-alpha3` uses [SQLCipher for Android 4.0.1](https://www.zetetic.net/blog/2018/12/18/sqlcipher-401-release/),
+Primarily, `1.0.0-beta1` uses [SQLCipher for Android 4.0.1](https://www.zetetic.net/blog/2018/12/18/sqlcipher-401-release/),
 the latest-and-greatest release of SQLCipher for Android.
 
 Part of what we get from that is an expanded `SQLiteDatabase` API, one that more
@@ -13,7 +13,7 @@ closely resembles the modern framework implementation. That, in turn, allows
 SafeRoom to fully implement the support database API &mdash; previous releases
 had some gaps (ones that Room, fortunately, tended not to use).
 
-Also, there are a few new utility options in `1.0.0-alpha3`, in part to deal with
+Also, there are a few new utility options in `1.0.0-beta1`, in part to deal with
 changes in SQLCipher for Android.
 
 And, SQLCipher for Android 4.0.1 has mitigations for
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.0-alpha3"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.0-beta1"
 }
 ```
 
@@ -49,7 +49,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.0-alpha3"
+    implementation "com.commonsware.cwac:saferoom:1.0.0-beta1"
 }
 ```
 
@@ -106,7 +106,7 @@ biometric, etc.).
 
 ## Questions
 
-If you run into problems with `1.0.0-alpha3` that you're pretty sure is a bug,
+If you run into problems with `1.0.0-beta1` that you're pretty sure is a bug,
 please post an [issue](https://github.com/commonsguy/cwac-saferoom/issues).
 Be certain to include complete steps for reproducing the issue.
 The [contribution guidelines](CONTRIBUTING.md)
@@ -123,6 +123,7 @@ Otherwise, please ask your questions either:
 
 ## Release Notes
 
+- v1.0.0-beta1: `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException` if the database to encrypt/decrypt is not found
 - v1.0.0-alpha3: Fixed dependency bug in AndroidX edition
 - v1.0.0-alpha2: Upgraded to SQLCipher for Android 4.0.1
 - v1.0.0-alpha1: Initial release of SQLCipher for Android 4.0.0 integration
