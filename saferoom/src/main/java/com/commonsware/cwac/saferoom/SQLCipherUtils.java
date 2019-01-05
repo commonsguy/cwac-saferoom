@@ -19,6 +19,7 @@ package com.commonsware.cwac.saferoom;
 import android.content.Context;
 import android.text.Editable;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -49,6 +50,10 @@ public class SQLCipherUtils {
   /**
    * Determine whether or not this database appears to be encrypted, based
    * on whether we can open it without a passphrase.
+   *
+   * NOTE: You are responsible for ensuring that net.sqlcipher.database.SQLiteDatabase.loadLibs()
+   * is called before calling this method. This is handled automatically with the
+   * getDatabaseState() method that takes a Context as a parameter.
    *
    * @param dbPath a File pointing to the database
    * @return the detected state of the database
@@ -167,6 +172,9 @@ public class SQLCipherUtils {
       originalFile.delete();
       newFile.renameTo(originalFile);
     }
+    else {
+      throw new FileNotFoundException(originalFile.getAbsolutePath()+" not found");
+    }
   }
 
   /**
@@ -211,6 +219,9 @@ public class SQLCipherUtils {
 
       originalFile.delete();
       newFile.renameTo(originalFile);
+    }
+    else {
+      throw new FileNotFoundException(originalFile.getAbsolutePath()+" not found");
     }
   }
 }
