@@ -19,6 +19,7 @@ package com.commonsware.cwac.saferoom;
 import android.content.Context;
 import android.text.Editable;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -167,6 +168,9 @@ public class SQLCipherUtils {
       originalFile.delete();
       newFile.renameTo(originalFile);
     }
+    else {
+      throw new FileNotFoundException(originalFile.getAbsolutePath()+" not found");
+    }
   }
 
   /**
@@ -211,6 +215,9 @@ public class SQLCipherUtils {
 
       originalFile.delete();
       newFile.renameTo(originalFile);
+    }
+    else {
+      throw new FileNotFoundException(originalFile.getAbsolutePath()+" not found");
     }
   }
 }
