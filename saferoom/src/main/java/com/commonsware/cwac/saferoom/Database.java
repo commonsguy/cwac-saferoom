@@ -20,6 +20,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteTransactionListener;
 import android.os.CancellationSignal;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Pair;
 import net.sqlcipher.database.SQLiteCursor;
 import net.sqlcipher.database.SQLiteCursorDriver;
@@ -292,7 +293,7 @@ class Database implements SupportSQLiteDatabase {
   @Override
   public int delete(String table, String whereClause, Object[] whereArgs) {
     String query = "DELETE FROM " + table
-      + (isEmpty(whereClause) ? "" : " WHERE " + whereClause);
+      + (TextUtils.isEmpty(whereClause) ? "" : " WHERE " + whereClause);
     SupportSQLiteStatement statement = compileStatement(query);
 
     try {
@@ -342,7 +343,7 @@ class Database implements SupportSQLiteDatabase {
         bindArgs[i] = whereArgs[i - setValuesSize];
       }
     }
-    if (!isEmpty(whereClause)) {
+    if (!TextUtils.isEmpty(whereClause)) {
       sql.append(" WHERE ");
       sql.append(whereClause);
     }
@@ -511,9 +512,5 @@ class Database implements SupportSQLiteDatabase {
     finally {
       editor.clear();
     }
-  }
-
-  private static boolean isEmpty(String input) {
-    return input == null || input.length() == 0;
   }
 }
