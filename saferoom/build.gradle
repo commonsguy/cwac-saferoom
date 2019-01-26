@@ -27,10 +27,12 @@ def roomVer="1.1.1"
 dependencies {
     api "net.zetetic:android-database-sqlcipher:4.0.1@aar"
     api "android.arch.persistence:db:$roomVer"
+    implementation "com.android.support:support-annotations:27.1.1"
     androidTestAnnotationProcessor "android.arch.persistence.room:compiler:$roomVer"
     androidTestImplementation "com.android.support.test:rules:1.0.2"
-    androidTestImplementation "com.commonsware.misc:support-db-tests:0.4.4"
+    androidTestImplementation "com.commonsware.misc:support-db-tests:0.4.5"
     androidTestImplementation "android.arch.persistence.room:runtime:$roomVer"
+    androidTestImplementation "com.android.support:support-annotations:27.1.1"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
