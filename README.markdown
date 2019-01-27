@@ -6,14 +6,6 @@ can use for working with a particular edition of SQLite. Specficially, this
 project's classes connect Room with [SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/),
 a version of SQLite that offers transparent encryption of its contents.
 
-Right now,
-this project is for experimentation purposes and for helping to prove the
-practicality of the `Support...` class setup. Do not use this in production
-applications just yet.
-
-See [a separate `README`](README-1.0.0.md) for information about
-the `1.0.0-beta1` release.
-
 ## Installation
 
 There are two versions of this library, for AndroidX and for the older Android Support Library.
@@ -30,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:0.5.1"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.0"
 }
 ```
 
@@ -44,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:0.4.5"
+    implementation "com.commonsware.cwac:saferoom:1.0.0"
 }
 ```
 
@@ -148,6 +140,49 @@ to the database, and a `char[]` with the passphrase. `decrypt()` will
 replace the encrypted database with a decrypted one, so that database can
 be opened using ordinary SQLite.
 
+## Upgrading to 1.0.0
+
+SafeRoom 1.x uses SQLCipher for Android 4.x. SafeRoom 0.x used SQLCipher for Android 3.x.
+
+The problem is that Zetetic changed the SQLCipher for Android file format
+between 3.x and 4.x.
+
+If you have existing SQLCipher for Android 3.x files, you will need to do a bit of extra
+work for existing databases in the older format.
+
+### Keeping the Old Format
+
+Perhaps you have a strong need to keep the database in the older format, for
+whatever reason. In that case, pass `SafeHelperFactory.POST_KEY_SQL_V3` as the
+second parameter to either the `SafeHelperFactory` constructor or `fromUser()`
+static method:
+
+```java
+SafeHelperFactory factory=
+  SafeHelperFactory.fromUser(new SpannableStringBuilder(passphraseField.getText()),
+    SafeHelperFactory.POST_KEY_SQL_V3);
+```
+
+This will open the database using `PRAGMA cipher_compatibility = 3;`, which was introduced
+in SQLCipher for Android 4.0.1.
+
+### Migrating to the New Format
+
+If you wish to convert to the newer, more secure settings, the *first time* that
+you open the existing database, pass `SafeHelperFactory.POST_KEY_SQL_MIGRATE`
+as the second parameter to the `SafeHelperFactory` constructor or `fromUser()`
+static method:
+
+```java
+SafeHelperFactory factory=
+  SafeHelperFactory.fromUser(new SpannableStringBuilder(passphraseField.getText()),
+    SafeHelperFactory.POST_KEY_SQL_MIGRATE);
+```
+
+This will convert the existing database in place. The second and subsequent times
+that you work with the database, you can (and should) skip this parameter, as the
+database will have already been migrated.
+
 ## Dependencies
 
 As one might expect, this project depends on SQLCipher for Android.
@@ -175,14 +210,7 @@ to it, etc.
 
 ## Version
 
-This is version v0.5.1 of this module.
-
-See [a separate `README`](README-1.0.0.md) for information about
-the `1.0.0-beta1` release.
-
-## Demo
-
-Right now, there is no demo project.
+This is version v1.0.0 of this module.
 
 ## Additional Documentation
 
@@ -233,16 +261,19 @@ of guidance here.
 
 ## Release Notes
 
-See [a separate `README`](README-1.0.0.md) for information about
-the `1.0.0-beta1` release.
-
 ### Android X
 
+- v1.0.0:
+    - Upgraded to SQLCipher for Android 4.0.1
+    - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException` if the database to encrypt/decrypt is not found
 - v0.5.1: added more synchronization
 - v0.5.0: released AndroidX edition
 
 ### Android Support Library
 
+- v1.0.0:
+    - Upgraded to SQLCipher for Android 4.0.1
+    - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException` if the database to encrypt/decrypt is not found
 - v0.4.5: added more synchronization
 - v0.4.4: addressed [thread-safety issue](https://github.com/commonsguy/cwac-saferoom/issues/27)
 - v0.4.3: bumped `android.arch.persistence:db` dependency to `1.1.1`
