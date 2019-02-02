@@ -66,6 +66,10 @@ public class DecryptTest {
   }
 
   private void dekey(Callable<?> decrypter) throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    assertEquals(SQLCipherUtils.State.DOES_NOT_EXIST, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
+
     SafeHelperFactory factory=
       SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
     SupportSQLiteOpenHelper helper=
@@ -76,7 +80,7 @@ public class DecryptTest {
     assertOriginalContent(db);
     db.close();
 
-    final Context ctxt=InstrumentationRegistry.getTargetContext();
+    assertEquals(SQLCipherUtils.State.ENCRYPTED, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
 
     decrypter.call();
 
@@ -86,6 +90,8 @@ public class DecryptTest {
 
     assertOriginalContent(plainDb);
     plainDb.close();
+
+    assertEquals(SQLCipherUtils.State.UNENCRYPTED, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
   }
 
   private void assertOriginalContent(SupportSQLiteDatabase db) {
