@@ -66,26 +66,32 @@ public class DecryptTest {
   }
 
   private void dekey(Callable<?> decrypter) throws Exception {
+    final Context ctxt=InstrumentationRegistry.getTargetContext();
+
+    assertEquals(SQLCipherUtils.State.DOES_NOT_EXIST, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
+
     SafeHelperFactory factory=
-            SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
+        SafeHelperFactory.fromUser(new SpannableStringBuilder(PASSPHRASE));
     SupportSQLiteOpenHelper helper=
-            factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME,
-                    new Callback(1));
+        factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME,
+            new Callback(1));
     SupportSQLiteDatabase db=helper.getWritableDatabase();
 
     assertOriginalContent(db);
     db.close();
 
-    final Context ctxt=InstrumentationRegistry.getTargetContext();
+    assertEquals(SQLCipherUtils.State.ENCRYPTED, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
 
     decrypter.call();
 
     SQLiteDatabase plainDb=
-            SQLiteDatabase.openDatabase(ctxt.getDatabasePath(DB_NAME).getAbsolutePath(),
-                    null, SQLiteDatabase.OPEN_READWRITE);
+        SQLiteDatabase.openDatabase(ctxt.getDatabasePath(DB_NAME).getAbsolutePath(),
+            null, SQLiteDatabase.OPEN_READWRITE);
 
     assertOriginalContent(plainDb);
     plainDb.close();
+
+    assertEquals(SQLCipherUtils.State.UNENCRYPTED, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
   }
 
   private void assertOriginalContent(SupportSQLiteDatabase db) {
