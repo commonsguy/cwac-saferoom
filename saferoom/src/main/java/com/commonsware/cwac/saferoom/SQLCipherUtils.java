@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteStatement;
 
 public class SQLCipherUtils {
   /**
@@ -162,8 +163,11 @@ public class SQLCipherUtils {
       db=SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), passphrase,
         null, SQLiteDatabase.OPEN_READWRITE);
 
-      db.rawExecSQL("ATTACH DATABASE '"+originalFile.getAbsolutePath()+
-        "' AS plaintext KEY ''");
+      final SQLiteStatement st=db.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
+
+      st.bindString(1, originalFile.getAbsolutePath());
+      st.execute();
+
       db.rawExecSQL("SELECT sqlcipher_export('main', 'plaintext')");
       db.rawExecSQL("DETACH DATABASE plaintext");
       db.setVersion(version);
@@ -203,8 +207,11 @@ public class SQLCipherUtils {
         SQLiteDatabase.openDatabase(originalFile.getAbsolutePath(),
           passphrase, null, SQLiteDatabase.OPEN_READWRITE);
 
-      db.rawExecSQL("ATTACH DATABASE '"+newFile.getAbsolutePath()+
-        "' AS plaintext KEY ''");
+      final SQLiteStatement st=db.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
+
+      st.bindString(1, newFile.getAbsolutePath());
+      st.execute();
+
       db.rawExecSQL("SELECT sqlcipher_export('plaintext')");
       db.rawExecSQL("DETACH DATABASE plaintext");
 
