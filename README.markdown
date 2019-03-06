@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.0"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.1"
 }
 ```
 
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.0"
+    implementation "com.commonsware.cwac:saferoom:1.0.1"
 }
 ```
 
@@ -263,6 +263,7 @@ of guidance here.
 
 ### Android X
 
+- v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
     - Upgraded to SQLCipher for Android 4.0.1
     - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException` if the database to encrypt/decrypt is not found
@@ -271,6 +272,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
     - Upgraded to SQLCipher for Android 4.0.1
     - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException` if the database to encrypt/decrypt is not found
