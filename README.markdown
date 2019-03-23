@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.1"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.2"
 }
 ```
 
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.1"
+    implementation "com.commonsware.cwac:saferoom:1.0.2"
 }
 ```
 
@@ -140,7 +140,7 @@ to the database, and a `char[]` with the passphrase. `decrypt()` will
 replace the encrypted database with a decrypted one, so that database can
 be opened using ordinary SQLite.
 
-## Upgrading to 1.0.0
+## Upgrading to 1.0.0 and Higher
 
 SafeRoom 1.x uses SQLCipher for Android 4.x. SafeRoom 0.x used SQLCipher for Android 3.x.
 
@@ -194,7 +194,7 @@ the support database API that Room uses.
 The Android Support Library edition of CWAC-SafeRoom is frozen at supporting `1.1.1`
 of `android.arch.persistence:db`.
 
-The AndroidX edition of CWAC-SafeRoom supports `2.0.0` of `androidx.sqlite:sqlite-framework`
+The AndroidX edition of CWAC-SafeRoom supports `2.0.1` of `androidx.sqlite:sqlite-framework`
 and should be updated to support newer versions of AndroidX over time.
 
 ## Tests
@@ -210,7 +210,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.0.0 of this module.
+This is version v1.0.2 of this module.
 
 ## Additional Documentation
 
@@ -263,6 +263,7 @@ of guidance here.
 
 ### Android X
 
+- v1.0.2: upgraded to SQLCipher for Android 4.1.3
 - v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
     - Upgraded to SQLCipher for Android 4.0.1
@@ -272,6 +273,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.0.2: upgraded to SQLCipher for Android 4.1.3
 - v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
     - Upgraded to SQLCipher for Android 4.0.1
