@@ -32,9 +32,9 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
  */
 class Helper implements SupportSQLiteOpenHelper {
   private final OpenHelper delegate;
-  private final char[] passphrase;
+  private final byte[] passphrase;
 
-  Helper(Context context, String name, Callback callback, char[] passphrase,
+  Helper(Context context, String name, Callback callback, byte[] passphrase,
          String postKeySql) {
     SQLiteDatabase.loadLibs(context);
     delegate=createDelegate(context, name, callback, postKeySql);
@@ -136,7 +136,7 @@ class Helper implements SupportSQLiteOpenHelper {
       this.callback=callback;
     }
 
-    synchronized SupportSQLiteDatabase getWritableSupportDatabase(char[] passphrase) {
+    synchronized SupportSQLiteDatabase getWritableSupportDatabase(byte[] passphrase) {
       migrated = false;
 
       SQLiteDatabase db=super.getWritableDatabase(passphrase);

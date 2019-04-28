@@ -18,6 +18,7 @@ import android.content.Context;
 import android.text.Editable;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
+import net.sqlcipher.database.SQLiteDatabase;
 
 /**
  * SupportSQLiteOpenHelper.Factory implementation, for use with Room
@@ -27,7 +28,7 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
   public static final String POST_KEY_SQL_MIGRATE = "PRAGMA cipher_migrate;";
   public static final String POST_KEY_SQL_V3 = "PRAGMA cipher_compatibility = 3;";
 
-  final private char[] passphrase;
+  final private byte[] passphrase;
   final private String postKeySql;
 
   /**
@@ -142,6 +143,34 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
    *                    "keyed" but before any database access is performed
    */
   public SafeHelperFactory(char[] passphrase, String postKeySql) {
+    this(SQLiteDatabase.getBytes(passphrase), postKeySql);
+  }
+
+  /**
+   * Standard constructor.
+   *
+   * Note that the passphrase supplied here will be filled in with zeros after
+   * the database is opened. Ideally, you should not create additional copies
+   * of this passphrase, particularly as String objects.
+   *
+   * @param passphrase user-supplied passphrase to use for the database
+   */
+  public SafeHelperFactory(byte[] passphrase) {
+    this(passphrase, null);
+  }
+
+  /**
+   * Standard constructor.
+   *
+   * Note that the passphrase supplied here will be filled in with zeros after
+   * the database is opened. Ideally, you should not create additional copies
+   * of this passphrase, particularly as String objects.
+   *
+   * @param passphrase user-supplied passphrase to use for the database
+   * @param postKeySql optional callback to be called after database has been
+   *                    "keyed" but before any database access is performed
+   */
+  public SafeHelperFactory(byte[] passphrase, String postKeySql) {
     this.passphrase=passphrase;
     this.postKeySql=postKeySql;
   }
