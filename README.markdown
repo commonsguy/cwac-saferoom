@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.2"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.3"
 }
 ```
 
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.2"
+    implementation "com.commonsware.cwac:saferoom:1.0.3"
 }
 ```
 
@@ -71,12 +71,12 @@ A cardinal rule of passphrases in Java is: do not hold them in `String`
 objects. You have no means of clearing those from memory, as a `String`
 is an immutable value.
 
-The `SafeHelperFactory` constructor takes a `char[]` for the passphrase. If
+The `SafeHelperFactory` constructor takes a either a `byte[]` or a `char[]` for the passphrase. If
 you are getting the passphrase from the user via an `EditText` widget,
 use the `fromUser()` factory method instead, supplying the `Editable`
 that you get from `getText()` on the `EditText`.
 
-SafeRoom will zero out the `char[]` once the database is opened. If you use
+SafeRoom will zero out the `byte[]` or `char[]` once the database is opened. If you use
 `fromUser()`, SafeRoom will also clear the contents of the `Editable`.
 
 ### Encrypting Existing Databases
@@ -210,7 +210,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.0.2 of this module.
+This is version v1.0.3 of this library.
 
 ## Additional Documentation
 
@@ -263,6 +263,7 @@ of guidance here.
 
 ### Android X
 
+- v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
 - v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
@@ -273,6 +274,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
 - v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
