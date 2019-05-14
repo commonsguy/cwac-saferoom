@@ -128,6 +128,27 @@ public class SQLCipherUtils {
    */
   public static void encrypt(Context ctxt, String dbName, char[] passphrase)
     throws IOException {
+    encrypt(ctxt, ctxt.getDatabasePath(dbName), SQLiteDatabase.getBytes(passphrase));
+  }
+
+  /**
+   * Replaces this database with a version encrypted with the supplied
+   * passphrase, deleting the original. Do not call this while the database
+   * is open, which includes during any Room migrations.
+   *
+   * The passphrase is untouched in this call. If you are going to turn around
+   * and use it with SafeHelperFactory.fromUser(), fromUser() will clear the
+   * passphrase. If not, please set all bytes of the passphrase to 0 or something
+   * to clear out the passphrase.
+   *
+   * @param ctxt a Context
+   * @param dbName the name of the database, as used with Room, SQLiteOpenHelper,
+   *               etc.
+   * @param passphrase the passphrase
+   * @throws IOException
+   */
+  public static void encrypt(Context ctxt, String dbName, byte[] passphrase)
+      throws IOException {
     encrypt(ctxt, ctxt.getDatabasePath(dbName), passphrase);
   }
 
@@ -147,6 +168,26 @@ public class SQLCipherUtils {
    * @throws IOException
    */
   public static void encrypt(Context ctxt, File originalFile, char[] passphrase)
+      throws IOException {
+    encrypt(ctxt, originalFile, SQLiteDatabase.getBytes(passphrase));
+  }
+
+  /**
+   * Replaces this database with a version encrypted with the supplied
+   * passphrase, deleting the original. Do not call this while the database
+   * is open, which includes during any Room migrations.
+   *
+   * The passphrase is untouched in this call. If you are going to turn around
+   * and use it with SafeHelperFactory.fromUser(), fromUser() will clear the
+   * passphrase. If not, please set all bytes of the passphrase to 0 or something
+   * to clear out the passphrase.
+   *
+   * @param ctxt a Context
+   * @param originalFile a File pointing to the database
+   * @param passphrase the passphrase from the user
+   * @throws IOException
+   */
+  public static void encrypt(Context ctxt, File originalFile, byte[] passphrase)
     throws IOException {
     SQLiteDatabase.loadLibs(ctxt);
 
@@ -161,7 +202,7 @@ public class SQLCipherUtils {
       db.close();
 
       db=SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), passphrase,
-        null, SQLiteDatabase.OPEN_READWRITE);
+        null, SQLiteDatabase.OPEN_READWRITE, null, null);
 
       final SQLiteStatement st=db.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
 
@@ -196,6 +237,25 @@ public class SQLCipherUtils {
    * @throws IOException
    */
   public static void decrypt(Context ctxt, File originalFile, char[] passphrase)
+      throws IOException {
+    decrypt(ctxt, originalFile, SQLiteDatabase.getBytes(passphrase));
+  }
+
+  /**
+   * Replaces this database with a decrypted version, deleting the original
+   * encrypted database. Do not call this while the database is open, which
+   * includes during any Room migrations.
+   *
+   * The passphrase is untouched in this call. Please set all bytes of the
+   * passphrase to 0 or something to clear out the passphrase if you are done
+   * with it.
+   *
+   * @param ctxt a Context
+   * @param originalFile a File pointing to the encrypted database
+   * @param passphrase the passphrase from the user for the encrypted database
+   * @throws IOException
+   */
+  public static void decrypt(Context ctxt, File originalFile, byte[] passphrase)
     throws IOException {
     SQLiteDatabase.loadLibs(ctxt);
 
@@ -205,7 +265,7 @@ public class SQLCipherUtils {
           ctxt.getCacheDir());
       SQLiteDatabase db=
         SQLiteDatabase.openDatabase(originalFile.getAbsolutePath(),
-          passphrase, null, SQLiteDatabase.OPEN_READWRITE);
+          passphrase, null, SQLiteDatabase.OPEN_READWRITE, null, null);
 
       final SQLiteStatement st=db.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
 
