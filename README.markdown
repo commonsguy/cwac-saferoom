@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.3"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.4"
 }
 ```
 
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.3"
+    implementation "com.commonsware.cwac:saferoom:1.0.4"
 }
 ```
 
@@ -97,7 +97,7 @@ without a passphrase. There are two versions of `getDatabaseState()`:
 `encrypt()` will take an unencrypted database as input and encrypt it
 using the supplied passphrase. Technically, it will encrypt a copy
 of the database, then delete the unencrypted one and rename the copy to
-the original name. There are three versions of `encrypt()`:
+the original name. There are five versions of `encrypt()`:
 
 - `encrypt(Context, String, Editable)` where the `String` is the database
 name and the `Editable` is the passphrase (e.g., from `getText()` on
@@ -108,6 +108,12 @@ name and the `char[]` is the passphrase
 
 - `encrypt(Context, File, char[])` where the `File` points to the database
 and the `char[]` is the passphrase
+
+- `encrypt(Context, String, byte[])` where the `String` is the database
+name and the `byte[]` is the passphrase
+
+- `encrypt(Context, File, byte[])` where the `File` points to the database
+and the `byte[]` is the passphrase
 
 The passphrase is left untouched by `encrypt()`, so you can turn around and
 use it with `SafeHelperFactory`. If you are not planning on opening the database,
@@ -136,7 +142,7 @@ not be zero'd out. Please clear that array as soon as you are done with it.
 
 You can call `decrypt()` on `SQLCipherUtils` to decrypt an existing
 SQLCipher-encrypted database. Supply the `Context`, the `File` pointing
-to the database, and a `char[]` with the passphrase. `decrypt()` will
+to the database, and a `char[]` or `byte[]` with the passphrase. `decrypt()` will
 replace the encrypted database with a decrypted one, so that database can
 be opened using ordinary SQLite.
 
@@ -210,7 +216,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.0.3 of this library.
+This is version v1.0.4 of this library.
 
 ## Additional Documentation
 
@@ -263,6 +269,7 @@ of guidance here.
 
 ### Android X
 
+- v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
 - v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
@@ -274,6 +281,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
 - v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
