@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.4"
+    implementation "com.commonsware.cwac:saferoom.x:1.0.5"
 }
 ```
 
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.4"
+    implementation "com.commonsware.cwac:saferoom:1.0.5"
 }
 ```
 
@@ -216,7 +216,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.0.4 of this library.
+This is version v1.0.5 of this library.
 
 ## Additional Documentation
 
@@ -269,6 +269,7 @@ of guidance here.
 
 ### Android X
 
+- v1.0.5: upgraded to SQLCipher for Android 4.2.0
 - v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
@@ -281,6 +282,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.0.5: upgraded to SQLCipher for Android 4.2.0
 - v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
