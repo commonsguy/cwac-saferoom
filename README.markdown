@@ -6,6 +6,10 @@ can use for working with a particular edition of SQLite. Specficially, this
 project's classes connect Room with [SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/),
 a version of SQLite that offers transparent encryption of its contents.
 
+## Notable Forks
+
+- https://github.com/hannesa2/cwac-saferoom
+
 ## Installation
 
 There are two versions of this library, for AndroidX and for the older Android Support Library.
