@@ -35,17 +35,17 @@ class Helper implements SupportSQLiteOpenHelper {
   private final byte[] passphrase;
 
   Helper(Context context, String name, Callback callback, byte[] passphrase,
-         String postKeySql) {
+         SafeHelperFactory.Options options) {
     SQLiteDatabase.loadLibs(context);
-    delegate=createDelegate(context, name, callback, postKeySql);
+    delegate=createDelegate(context, name, callback, options);
     this.passphrase=passphrase;
   }
 
   private OpenHelper createDelegate(Context context, String name,
-                                    final Callback callback, String postKeySql) {
+                                    final Callback callback, SafeHelperFactory.Options options) {
     final Database[] dbRef = new Database[1];
 
-    return(new OpenHelper(context, name, dbRef, callback, postKeySql));
+    return(new OpenHelper(context, name, dbRef, callback, options));
   }
 
   /**
@@ -108,17 +108,19 @@ class Helper implements SupportSQLiteOpenHelper {
     private volatile boolean migrated;
 
     OpenHelper(Context context, String name, Database[] dbRef, Callback callback,
-               String postKeySql) {
+               SafeHelperFactory.Options options) {
       super(context, name, null, callback.version, new SQLiteDatabaseHook() {
         @Override
         public void preKey(SQLiteDatabase database) {
-          // no-op
+          if (options!=null && options.preKeySql!=null) {
+            database.rawExecSQL(options.preKeySql);
+          }
         }
 
         @Override
         public void postKey(SQLiteDatabase database) {
-          if (postKeySql!=null) {
-            database.rawExecSQL(postKeySql);
+          if (options!=null && options.postKeySql!=null) {
+            database.rawExecSQL(options.postKeySql);
           }
         }
       }, new DatabaseErrorHandler() {
