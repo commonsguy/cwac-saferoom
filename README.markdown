@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.0.5"
+    implementation "com.commonsware.cwac:saferoom.x:1.1.0"
 }
 ```
 
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.0.5"
+    implementation "com.commonsware.cwac:saferoom:1.1.0"
 }
 ```
 
@@ -189,6 +189,27 @@ This will convert the existing database in place. The second and subsequent time
 that you work with the database, you can (and should) skip this parameter, as the
 database will have already been migrated.
 
+## Support for Pre-Key and Post-Key SQL
+
+SQLCipher for Android supports [a number of custom `PRAGMA`s](https://www.zetetic.net/sqlcipher/sqlcipher-api/)
+for configuring the encryption, such as the number of PBKDF2 iterations to use for
+key stretching. Some of that SQL needs to be performed at specific times with respect
+to opening the database.
+
+For SQL that needs to be executed after the database key is set but before you get
+to start using the database, you can pass the SQL in as a parameter to the
+`SafeHelperFactory` constructor or `fromUser()` methods &mdash; that is what the
+upgrade options in the preceding sections are doing.
+
+More formally, you can pass a `SafeHelperFactory.Options` object as the second
+parameter, supplying both pre-key and post-key SQL statements to be executed.
+You can create an `Options` object by calling the `builder()` `static` method
+on `Options`, calling setters for the SQL, then `build()` to get the options:
+
+```java
+SafeHelperFactory.Options options = SafeHelperFactory.Options.builder().setPreKeySql(PREKEY_SQL).build();
+```
+
 ## Dependencies
 
 As one might expect, this project depends on SQLCipher for Android.
@@ -216,7 +237,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.0.5 of this library.
+This is version v1.1.0 of this library.
 
 ## Additional Documentation
 
@@ -269,6 +290,7 @@ of guidance here.
 
 ### Android X
 
+- v1.1.0: added `SafeHelperFactory.Options` and support for pre-key SQL
 - v1.0.5: upgraded to SQLCipher for Android 4.2.0
 - v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
@@ -282,6 +304,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.1.0: added `SafeHelperFactory.Options` and support for pre-key SQL
 - v1.0.5: upgraded to SQLCipher for Android 4.2.0
 - v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
