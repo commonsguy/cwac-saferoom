@@ -171,7 +171,8 @@ public class DaoTests {
     assertNotNull(rootTuple);
     assertEquals(1, rootTuple.children.size());
     assertIdentical(child, rootTuple.children.get(0));
-    assertNull(rootTuple.parents);
+    assertNotNull(rootTuple.parents);
+    assertEquals(0, rootTuple.parents.size());
 
     final List<CategoryTuple> tuples=store.findChildCategoryTuples(rootTuple.id);
 

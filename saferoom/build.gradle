@@ -21,7 +21,7 @@ android {
     }
 }
 
-def roomVer="2.0.0"
+def roomVer="2.1.0"
 
 dependencies {
     api "net.zetetic:android-database-sqlcipher:4.2.0@aar"
@@ -29,7 +29,9 @@ dependencies {
     androidTestAnnotationProcessor "androidx.room:room-compiler:$roomVer"
     androidTestImplementation "com.android.support.test:rules:1.0.2"
     androidTestImplementation "com.commonsware.misc:support.db.tests.x:0.4.5"
-    androidTestImplementation "androidx.room:room-runtime:$roomVer"
+    androidTestImplementation("androidx.room:room-runtime:$roomVer") {
+        exclude group: 'androidx.annotation', module: 'annotation'
+    }
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
