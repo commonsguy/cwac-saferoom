@@ -34,7 +34,7 @@ public class DaoTests {
 
   @Before
   public void setUp() {
-    db=StuffDatabase.create(InstrumentationRegistry.getTargetContext(), false);
+    db=StuffDatabase.create(InstrumentationRegistry.getTargetContext(), false, false);
     store=db.stuffStore();
   }
 
@@ -45,15 +45,7 @@ public class DaoTests {
     String name=StuffDatabase.DB_NAME;
     File db=InstrumentationRegistry.getTargetContext().getDatabasePath(name);
 
-    if (db.exists()) {
-      db.delete();
-    }
-
-    File journal=new File(db.getParentFile(), name+"-journal");
-
-    if (journal.exists()) {
-      journal.delete();
-    }
+    deleteDirectory(db.getParentFile());
   }
 
   @Test
@@ -192,9 +184,19 @@ public class DaoTests {
     assertEquals(0, results.size());
   }
 
-  void assertIdentical(Category one, Category two) {
+  private void assertIdentical(Category one, Category two) {
     assertEquals(one.id, two.id);
     assertEquals(one.title, two.title);
     assertEquals(one.parentId, two.parentId);
+  }
+
+  private static void deleteDirectory(File directoryToBeDeleted) {
+    File[] allContents = directoryToBeDeleted.listFiles();
+    if (allContents != null) {
+      for (File file : allContents) {
+        deleteDirectory(file);
+      }
+    }
+    directoryToBeDeleted.delete();
   }
 }

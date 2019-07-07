@@ -33,15 +33,7 @@ abstract class StuffDatabase extends RoomDatabase {
   static final String DB_NAME="stuff.db";
   private static volatile StuffDatabase INSTANCE=null;
 
-  synchronized static StuffDatabase get(Context ctxt) {
-    if (INSTANCE==null) {
-      INSTANCE=create(ctxt, false);
-    }
-
-    return(INSTANCE);
-  }
-
-  static StuffDatabase create(Context ctxt, boolean memoryOnly) {
+  static StuffDatabase create(Context ctxt, boolean memoryOnly, boolean truncate) {
     RoomDatabase.Builder<StuffDatabase> b;
 
     if (memoryOnly) {
@@ -51,6 +43,10 @@ abstract class StuffDatabase extends RoomDatabase {
     else {
       b=Room.databaseBuilder(ctxt.getApplicationContext(), StuffDatabase.class,
         DB_NAME);
+    }
+
+    if (truncate) {
+      b.setJournalMode(JournalMode.TRUNCATE);
     }
 
     b.openHelperFactory(SafeHelperFactory.fromUser(new SpannableStringBuilder("sekrit")));
