@@ -212,6 +212,7 @@ public class SQLCipherUtils {
       db.rawExecSQL("SELECT sqlcipher_export('main', 'plaintext')");
       db.rawExecSQL("DETACH DATABASE plaintext");
       db.setVersion(version);
+      st.execute();
       db.close();
 
       originalFile.delete();
@@ -277,6 +278,7 @@ public class SQLCipherUtils {
 
       int version=db.getVersion();
 
+      st.execute();
       db.close();
 
       db=SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), "",
