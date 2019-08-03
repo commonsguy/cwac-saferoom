@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.1.1"
+    implementation "com.commonsware.cwac:saferoom.x:1.1.2"
 }
 ```
 
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.1.1"
+    implementation "com.commonsware.cwac:saferoom:1.1.2"
 }
 ```
 
@@ -241,7 +241,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.1.1 of this library.
+This is version v1.1.2 of this library.
 
 ## Additional Documentation
 
@@ -294,6 +294,7 @@ of guidance here.
 
 ### Android X
 
+- v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`
 - v1.1.1: fixed a bug in `BindingsRecorder`
 - v1.1.0: added `SafeHelperFactory.Options` and support for pre-key SQL
 - v1.0.5: upgraded to SQLCipher for Android 4.2.0
@@ -309,6 +310,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`
 - v1.1.1: fixed a bug in `BindingsRecorder`
 - v1.1.0: added `SafeHelperFactory.Options` and support for pre-key SQL
 - v1.0.5: upgraded to SQLCipher for Android 4.2.0
