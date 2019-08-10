@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.1.2"
+    implementation "com.commonsware.cwac:saferoom.x:1.1.3"
 }
 ```
 
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.1.2"
+    implementation "com.commonsware.cwac:saferoom:1.1.3"
 }
 ```
 
@@ -150,6 +150,11 @@ to the database, and a `char[]` or `byte[]` with the passphrase. `decrypt()` wil
 replace the encrypted database with a decrypted one, so that database can
 be opened using ordinary SQLite.
 
+### Opening Unencrypted Databases
+
+If you need to open a regular unencrypted SQLite database, use
+`new SafeHelperFactory("".toCharArray())` to create the `SafeHelperFactory`.
+
 ## Upgrading to 1.0.0 and Higher
 
 SafeRoom 1.x uses SQLCipher for Android 4.x. SafeRoom 0.x used SQLCipher for Android 3.x.
@@ -241,7 +246,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.1.2 of this library.
+This is version v1.1.3 of this library.
 
 ## Additional Documentation
 
@@ -294,6 +299,7 @@ of guidance here.
 
 ### Android X
 
+- v1.1.3: fixed bug preventing `SafeHelperFactory` from opening unencrypted databases
 - v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`
 - v1.1.1: fixed a bug in `BindingsRecorder`
 - v1.1.0: added `SafeHelperFactory.Options` and support for pre-key SQL
@@ -310,6 +316,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.1.3: fixed bug preventing `SafeHelperFactory` from opening unencrypted databases
 - v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`
 - v1.1.1: fixed a bug in `BindingsRecorder`
 - v1.1.0: added `SafeHelperFactory.Options` and support for pre-key SQL
