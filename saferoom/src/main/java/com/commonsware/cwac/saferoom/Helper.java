@@ -77,8 +77,10 @@ class Helper implements SupportSQLiteOpenHelper {
     SupportSQLiteDatabase result=
         delegate.getWritableSupportDatabase(passphrase);
 
-    for (int i=0;i<passphrase.length;i++) {
-      passphrase[i]=(char)0;
+    if (passphrase != null) {
+      for (int i = 0; i < passphrase.length; i++) {
+        passphrase[i] = (char) 0;
+      }
     }
 
     return(result);
