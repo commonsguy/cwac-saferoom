@@ -92,6 +92,14 @@ public class DecryptTest {
     plainDb.close();
 
     assertEquals(SQLCipherUtils.State.UNENCRYPTED, SQLCipherUtils.getDatabaseState(ctxt, DB_NAME));
+
+    factory = new SafeHelperFactory("".toCharArray());
+    helper = factory.create(InstrumentationRegistry.getTargetContext(), DB_NAME, new Callback(1));
+    db = helper.getReadableDatabase();
+
+    assertOriginalContent(db);
+
+    db.close();
   }
 
   private void assertOriginalContent(SupportSQLiteDatabase db) {
