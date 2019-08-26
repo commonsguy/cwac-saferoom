@@ -257,9 +257,16 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
      */
     public final String postKeySql;
 
-    private Options(String preKeySql, String postKeySql) {
+    /*
+     * True if we should clear the in-memory cached copy of the passphrase after
+     * opening the database; false otherwise. Defaults to true.
+     */
+    public final boolean clearPassphrase;
+
+    private Options(String preKeySql, String postKeySql, boolean clearPassphrase) {
       this.preKeySql = preKeySql;
       this.postKeySql = postKeySql;
+      this.clearPassphrase = clearPassphrase;
     }
 
     /**
@@ -277,6 +284,7 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
     public static class Builder {
       private String preKeySql;
       private String postKeySql;
+      private boolean clearPassphrase = true;
 
       private Builder() {
         // use the builder() method on SafeRoomHelper.Options
@@ -303,10 +311,21 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
       }
 
       /**
+       * @param value true if we should clear the in-memory cached copy of the passphrase after
+       *              opening the database; false otherwise. Defaults to true.
+       * @return the builder, for further configuration
+       */
+      public Builder setClearPassphrase(boolean value) {
+        this.clearPassphrase = value;
+
+        return this;
+      }
+
+      /**
        * @return the Options object containing your requested SQL
        */
       public Options build() {
-        return new Options(preKeySql, postKeySql);
+        return new Options(preKeySql, postKeySql, clearPassphrase);
       }
     }
   }
