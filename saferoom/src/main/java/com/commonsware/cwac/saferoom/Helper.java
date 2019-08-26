@@ -22,6 +22,7 @@ import android.os.Build;
 import net.sqlcipher.DatabaseErrorHandler;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteDatabaseHook;
+import net.sqlcipher.database.SQLiteException;
 import net.sqlcipher.database.SQLiteOpenHelper;
 import androidx.annotation.RequiresApi;
 import androidx.sqlite.db.SupportSQLiteDatabase;
@@ -33,10 +34,12 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 class Helper implements SupportSQLiteOpenHelper {
   private final OpenHelper delegate;
   private final byte[] passphrase;
+  private final boolean clearPassphrase;
 
   Helper(Context context, String name, Callback callback, byte[] passphrase,
          SafeHelperFactory.Options options) {
     SQLiteDatabase.loadLibs(context);
+    clearPassphrase=options.clearPassphrase;
     delegate=createDelegate(context, name, callback, options);
     this.passphrase=passphrase;
   }
@@ -68,17 +71,40 @@ class Helper implements SupportSQLiteOpenHelper {
   /**
    * {@inheritDoc}
    *
-   * NOTE: this implementation zeros out the passphrase after opening the
+   * NOTE: by default, this implementation zeros out the passphrase after opening the
    * database
    */
   @Override
   synchronized public SupportSQLiteDatabase getWritableDatabase() {
-    SupportSQLiteDatabase result=
-      delegate.getWritableSupportDatabase(passphrase);
+    SupportSQLiteDatabase result;
 
-    if (passphrase != null) {
+    try {
+      result = delegate.getWritableSupportDatabase(passphrase);
+    }
+    catch (SQLiteException e) {
+      if (passphrase != null) {
+        boolean isCleared = true;
+
+        for (byte b : passphrase) {
+          isCleared = isCleared && (b == (byte) 0);
+        }
+
+        if (isCleared) {
+          throw new IllegalStateException("The passphrase appears to be cleared. This happens by" +
+              "default the first time you use the factory to open a database, so we can remove the" +
+              "cleartext passphrase from memory. If you close the database yourself, please use a" +
+              "fresh SafeHelperFactory to reopen it. If something else (e.g., Room) closed the" +
+              "database, and you cannot control that, use SafeHelperFactory.Options to opt out of" +
+              "the automatic password clearing step. See the project README for more information.");
+        }
+      }
+
+      throw e;
+    }
+
+    if (clearPassphrase && passphrase != null) {
       for (int i = 0; i < passphrase.length; i++) {
-        passphrase[i] = (char) 0;
+        passphrase[i] = (byte) 0;
       }
     }
 
