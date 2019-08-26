@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.1.3"
+    implementation "com.commonsware.cwac:saferoom.x:1.2.0"
 }
 ```
 
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.1.3"
+    implementation "com.commonsware.cwac:saferoom:1.2.0"
 }
 ```
 
@@ -219,6 +219,62 @@ on `Options`, calling setters for the SQL, then `build()` to get the options:
 SafeHelperFactory.Options options = SafeHelperFactory.Options.builder().setPreKeySql(PREKEY_SQL).build();
 ```
 
+## Closing the Database
+
+Frequently, apps do not close their databases. Given asynchronous work, it is not
+always clear when it is safe to close the database. However, there may be times
+when you specifically do want to close the database. For example, closing the database
+is a good idea before you try working with the database files directly, such as for
+backup or restore operations.
+
+However, by default, the `SafeHelperFactory` object is a single-use object. Use it
+to open a database, but if you close that database, create a fresh `SafeHelperFactory`
+object to open the database again.
+
+The reason for this is that `SafeHelperFactory` needs to cache the passphrase
+between the time you create the factory and when you try opening the database (directly
+or indirectly). By default, `SafeHelperFactory` clears out that cached passphrase,
+so the plaintext passphrase is not held in memory any longer than it has to. However,
+this means that attempting to reuse the `SafeHelperFactory`, and open the database
+again after closing it, will fail. 
+
+However, it is possible that you are using code that opens and closes the database
+on its own, and you do not control the timing of that work. If so, you can opt
+out of the automatic passphrase clearing feature. To do this, use the `SafeHelperFactory.Options`
+and its `setClearPassphrase()` option, passing in `false`:
+
+```java
+// EditText passphraseField;
+SafeHelperFactory.Options options = SafeHelperFactory.Options.builder().setClearPassphrase(false).build();
+SafeHelperFactory factory=SafeHelperFactory.fromUser(passphraseField.getText(), options);
+
+StuffDatabase db=Room.databaseBuilder(ctxt, StuffDatabase.class, DB_NAME)
+  .openHelperFactory(factory)
+  .build();
+```
+
+However, bear in mind that this weakens the security of your app a bit, as that
+passphrase will remain in memory indefinitely.
+
+## Hey, I Got This Really Long `IllegalStateException` Message!
+
+If you are here because your logs show:
+
+```
+The passphrase appears to be cleared. This happens by
+default the first time you use the factory to open a database, so we can remove the
+cleartext passphrase from memory. If you close the database yourself, please use a
+fresh SafeHelperFactory to reopen it. If something else (e.g., Room) closed the
+database, and you cannot control that, use SafeHelperFactory.Options to opt out of
+the automatic password clearing step. See the project README for more information.
+```
+
+...then read the preceding section ("Closing the Database"). This particular
+`IllegalStateException` message appears if you attempt to open a database,
+and the passphrase is not `null` but has `0` for all its bytes. It is likely that
+this means that the passphrase was cleared automatically, and the preceding
+section explains what is going on.
+
 ## Dependencies
 
 As one might expect, this project depends on SQLCipher for Android.
@@ -246,7 +302,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.1.3 of this library.
+This is version v1.2.0 of this library.
 
 ## Additional Documentation
 
@@ -299,6 +355,7 @@ of guidance here.
 
 ### Android X
 
+- v1.2.0: added support for opting out of passphrase clearing
 - v1.1.3: fixed bug preventing `SafeHelperFactory` from opening unencrypted databases
 - v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`
 - v1.1.1: fixed a bug in `BindingsRecorder`
@@ -316,6 +373,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.2.0: added support for opting out of passphrase clearing
 - v1.1.3: fixed bug preventing `SafeHelperFactory` from opening unencrypted databases
 - v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`
 - v1.1.1: fixed a bug in `BindingsRecorder`
