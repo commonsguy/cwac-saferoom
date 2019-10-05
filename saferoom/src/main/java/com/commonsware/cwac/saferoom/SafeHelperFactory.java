@@ -160,6 +160,8 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
    */
   public SafeHelperFactory(char[] passphrase, String postKeySql) {
     this(SQLiteDatabase.getBytes(passphrase), postKeySql);
+
+    if (options.clearPassphrase) { clearPassphrase(passphrase); }
   }
 
   /**
@@ -178,6 +180,8 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
    */
   public SafeHelperFactory(char[] passphrase, Options options) {
     this(SQLiteDatabase.getBytes(passphrase), options);
+
+    if (options.clearPassphrase) { clearPassphrase(passphrase); }
   }
 
   /**
@@ -240,6 +244,12 @@ public class SafeHelperFactory implements SupportSQLiteOpenHelper.Factory {
   public SupportSQLiteOpenHelper create(Context context, String name,
                                         SupportSQLiteOpenHelper.Callback callback) {
     return(new Helper(context, name, callback, passphrase, options));
+  }
+
+  private void clearPassphrase(char[] passphrase) {
+    for (int i = 0; i < passphrase.length; i++) {
+      passphrase[i] = (byte) 0;
+    }
   }
 
   /**

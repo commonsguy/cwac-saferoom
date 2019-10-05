@@ -32,6 +32,7 @@ dependencies {
     androidTestImplementation("androidx.room:room-runtime:$roomVer") {
         exclude group: 'androidx.annotation', module: 'annotation'
     }
+    androidTestImplementation "junit:junit:4.12"
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
