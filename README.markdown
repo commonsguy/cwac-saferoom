@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.2.0"
+    implementation "com.commonsware.cwac:saferoom.x:1.2.1"
 }
 ```
 
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom:1.2.0"
+    implementation "com.commonsware.cwac:saferoom:1.2.1"
 }
 ```
 
@@ -302,7 +302,7 @@ to it, etc.
 
 ## Version
 
-This is version v1.2.0 of this library.
+This is version v1.2.1 of this library.
 
 ## Additional Documentation
 
@@ -355,6 +355,7 @@ of guidance here.
 
 ### Android X
 
+- v1.2.1: fixed bug where `char[]` passphrases were no longer being cleared after use
 - v1.2.0: added support for opting out of passphrase clearing
 - v1.1.3: fixed bug preventing `SafeHelperFactory` from opening unencrypted databases
 - v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`
@@ -373,6 +374,7 @@ of guidance here.
 
 ### Android Support Library
 
+- v1.2.1: fixed bug where `char[]` passphrases were no longer being cleared after use
 - v1.2.0: added support for opting out of passphrase clearing
 - v1.1.3: fixed bug preventing `SafeHelperFactory` from opening unencrypted databases
 - v1.1.2: closed `SQLStatement` used in `encrypt()`, `decrypt()`

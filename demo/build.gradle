@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.14.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     debugImplementation project(":saferoom")
-    releaseImplementation "com.commonsware.cwac:saferoom.x:1.2.0"
+    releaseImplementation "com.commonsware.cwac:saferoom.x:1.2.1"
 }
 repositories {
     mavenCentral()
