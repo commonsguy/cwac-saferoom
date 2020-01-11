@@ -1,10 +1,13 @@
 # CWAC-SafeRoom: A Room<->SQLCipher for Android Bridge
 
-This project implements the `Support...` series of classes and interfaces
+This project implements the `SupportSQLite...` series of classes and interfaces
 that [Room](https://developer.android.com/topic/libraries/architecture/room.html)
 can use for working with a particular edition of SQLite. Specficially, this
 project's classes connect Room with [SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/),
 a version of SQLite that offers transparent encryption of its contents.
+
+**NOTE**: SQLCipher for Android has its own implementation of the `SupportSQLite...` classes and interfaces.
+Please consider using SQLCipher for Android directly, rather than using SafeRoom.
 
 ## Notable Forks
 
@@ -26,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.commonsware.cwac:saferoom.x:1.2.1"
+    implementation "com.commonsware.cwac:saferoom.x:1.3.0"
 }
 ```
 
@@ -277,7 +280,9 @@ section explains what is going on.
 
 ## Dependencies
 
-As one might expect, this project depends on SQLCipher for Android.
+As one might expect, this project depends on SQLCipher for Android. The AndroidX edition
+of SafeRoom supports SQLCipher for Android 4.3.0, while the Android Support Library
+edition supports SQLCipher for Android 4.2.0.
 
 This project also depends upon `android.arch.persistence:db` (Android Support Library edition)
 or `androidx.sqlite:sqlite-framework` (AndroidX edition), which is
@@ -289,6 +294,12 @@ of `android.arch.persistence:db`.
 The AndroidX edition of CWAC-SafeRoom supports `2.0.1` of `androidx.sqlite:sqlite-framework`
 and should be updated to support newer versions of AndroidX over time.
 
+In terms of Android versions:
+
+- Version 1.3.0 of the AndroidX SafeRoom requires API Level 16 or higher
+
+- Other versions of SafeRoom require API Level 15 or higher
+
 ## Tests
 
 This project has two sources of tests. Some are local to the project. The
@@ -299,10 +310,6 @@ implementation.
 TL;DR: to run the full set of CWAC-SafeRoom tests, use `SafeRoomSuite`.
 Either run that directly from your IDE, or set up a run configuration pointing
 to it, etc.
-
-## Version
-
-This is version v1.2.1 of this library.
 
 ## Additional Documentation
 
@@ -355,6 +362,7 @@ of guidance here.
 
 ### Android X
 
+- v1.3.0: upgraded to SQLCipher for Android 4.3.0
 - v1.2.1: fixed bug where `char[]` passphrases were no longer being cleared after use
 - v1.2.0: added support for opting out of passphrase clearing
 - v1.1.3: fixed bug preventing `SafeHelperFactory` from opening unencrypted databases
