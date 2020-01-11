@@ -311,6 +311,16 @@ TL;DR: to run the full set of CWAC-SafeRoom tests, use `SafeRoomSuite`.
 Either run that directly from your IDE, or set up a run configuration pointing
 to it, etc.
 
+## ProGuard
+
+SafeRoom itself should require no special ProGuard setup. You may need to add
+ProGuard rules for SQLCipher for Android, such as:
+
+```
+-keep class net.sqlcipher.** { ; }
+-keep class net.sqlcipher.database. { *; }
+```
+
 ## Additional Documentation
 
 [JavaDocs are available](http://javadocs.commonsware.com/cwac/saferoom/index.html),
