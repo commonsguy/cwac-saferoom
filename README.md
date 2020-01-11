@@ -16,5 +16,5 @@ for more about using SQLCipher for Android with Room, SQLDelight, and other
 visit [the SQLCipher support board](https://discuss.zetetic.net/c/sqlcipher).
 
 You can still use SafeRoom if you wish &mdash; instructions can be found in
-[the original `README`](blob/master/README-original.markdown).
+[the original `README`](./README-original.markdown).
 
